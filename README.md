@@ -7,6 +7,56 @@
 
 支持多语言的具有默认主题外观的像素主题。
 
+## 概述
+
+[Aseprite](https://github.com/aseprite/aseprite) 从 [v1.3.3](https://github.com/aseprite/aseprite/releases/tag/v1.3.3) 开始，已内置[官方翻译](https://github.com/aseprite/strings)。
+
+但是其[内置的像素字体](https://github.com/aseprite/aseprite/tree/main/data/fonts)支持的字符相当有限，基本上仅覆盖基础西文字母。
+
+因此，我们尝试基于[默认主题](https://github.com/aseprite/aseprite/tree/main/data/extensions/aseprite-theme)进行改造，在尽可能保留原始主题外观的情况下，使其支持多语言。
+
+## 预览
+
+字体部分由[「缝合像素字体」](https://github.com/TakWolf/fusion-pixel-font)提供支持。
+
+目前大体支持下列展示的语言。其他语言虽未列出，但有可能也受到支持。
+
+### 英文
+
+![en](docs/preview/en.png)
+
+### 中文（简体）
+
+![zh_Hans](docs/preview/zh_Hans.png)
+
+### 中文（繁体）
+
+![zh_Hant](docs/preview/zh_Hant.png)
+
+### 日语
+
+![ja](docs/preview/ja.png)
+
+### 韩语
+
+![ko](docs/preview/ko.png)
+
+### 俄语
+
+![ru](docs/preview/ru.png)
+
+### 法语
+
+![fr](docs/preview/fr.png)
+
+### 德语
+
+![de](docs/preview/de.png)
+
+### 意大利语
+
+![it](docs/preview/it.png)
+
 ## 许可证
 
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
