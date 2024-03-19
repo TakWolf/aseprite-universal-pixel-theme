@@ -37,12 +37,15 @@ def _copy_others():
     fs_util.copy_the_file('package.json', os.path.join(assets_dir, 'static'), data_dir)
 
 
-def _xml_set_id_attribute(parent: Document | Element, attribute_name: str):
-    if parent.nodeType == Node.ELEMENT_NODE:
-        if parent.hasAttribute(attribute_name):
-            parent.setIdAttribute(attribute_name)
+def _xml_get_item_node_by_id(parent: Element, id_name: str) -> Element | None:
     for child in parent.childNodes:
-        _xml_set_id_attribute(child, attribute_name)
+        if child.nodeType != Node.ELEMENT_NODE:
+            continue
+        if not child.hasAttribute('id'):
+            continue
+        if child.getAttribute('id') == id_name:
+            return child
+    return None
 
 
 def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str):
@@ -76,11 +79,11 @@ def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str):
     node_font_8px.setAttribute('antialias', 'false')
     node_font_8px.setAttribute('file', f'{relative_path}/fonts/8/fusion-pixel-8px-proportional-zh_hans.otf')
 
-    node_font_default = dom.getElementById('default')
+    node_font_default = _xml_get_item_node_by_id(node_fonts, 'default')
     node_font_default.setAttribute('font', node_font_10px.getAttribute('name'))
     node_font_default.setAttribute('size', '10')
 
-    node_font_mini = dom.getElementById('mini')
+    node_font_mini = _xml_get_item_node_by_id(node_fonts, 'mini')
     node_font_mini.setAttribute('font', node_font_8px.getAttribute('name'))
     node_font_mini.setAttribute('size', '8')
     node_font_mini.removeAttribute('mnemonics')
@@ -90,14 +93,15 @@ def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str):
 
     # -------
     # 修复属性
-    node_tabs_height = dom.getElementById('tabs_height')
-    node_tabs_height.setAttribute('value', '19')
+    node_dimensions = dom.getElementsByTagName('dimensions')[0]
+
+    node_dim_tabs_height = _xml_get_item_node_by_id(node_dimensions, 'tabs_height')
+    node_dim_tabs_height.setAttribute('value', '19')
 
 
 def _modify_light_theme_xml():
     file_path = os.path.join(data_dir, 'theme.xml')
     dom = fs_util.read_xml(file_path)
-    _xml_set_id_attribute(dom, 'id')
     _modify_theme_xml(dom, 'Universal Pixel Light', '.')
     fs_util.write_xml(dom, file_path)
 
@@ -105,7 +109,6 @@ def _modify_light_theme_xml():
 def _modify_dark_theme_xml():
     file_path = os.path.join(data_dir, 'dark', 'theme.xml')
     dom = fs_util.read_xml(file_path)
-    _xml_set_id_attribute(dom, 'id')
     _modify_theme_xml(dom, 'Universal Pixel Dark', '..')
     fs_util.write_xml(dom, file_path)
 
