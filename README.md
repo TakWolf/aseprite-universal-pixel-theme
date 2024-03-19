@@ -21,6 +21,8 @@
 
 目前大体支持下列展示的语言。其他语言虽未列出，但有可能也受到支持。
 
+如果出现缺字情况，或需要支持其他语言，请在 [Issues](https://github.com/TakWolf/aseprite-universal-pixel-theme/issues) 提交反馈。
+
 ### 英文
 
 ![en](docs/preview/en.png)
@@ -56,6 +58,17 @@
 ### 意大利语
 
 ![it](docs/preview/it.png)
+
+## 安装
+
+主题的安装方法请参考官方文档：[Aseprite Extensions](https://aseprite.org/docs/extensions/)
+
+安装完成后，请选择下面两个主题：
+
+- Universal Pixel Theme - Light
+- Universal Pixel Theme - Dark
+
+![Install](docs/install.png)
 
 ## 许可证
 
