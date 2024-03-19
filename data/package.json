@@ -1,0 +1,44 @@
+{
+  "name": "universal-pixel-theme",
+  "displayName": "Universal Pixel Theme",
+  "description": "Aseprite multilingual supported Pixel-Art Themes, based on Default Aseprite Pixel-Art Themes",
+  "version": "1.3.5",
+  "author": {
+    "name": "TakWolf",
+    "url": "https://takwolf.com"
+  },
+  "contributors": [
+    {
+      "name": "David Capello",
+      "email": "david@igarastudio.com",
+      "url": "https://davidcapello.com/"
+    },
+    {
+      "name": "Ilija Melentijevic",
+      "url": "https://ilkke.blogspot.com/"
+    },
+    {
+      "name": "Nicolas Desilets",
+      "url": "https://twitter.com/MapleGecko"
+    }
+  ],
+  "publisher": "TakWolf",
+  "license": "CC-BY-4.0",
+  "categories": [
+    "Themes"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "id": "universal-pixel-light",
+        "path": ".",
+        "variant": "Light"
+      },
+      {
+        "id": "universal-pixel-dark",
+        "path": "./dark",
+        "variant": "Dark"
+      }
+    ]
+  }
+}
