@@ -87,6 +87,11 @@ def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str):
     node_fonts.insertBefore(node_font_8px, node_font_default)
     node_fonts.insertBefore(node_font_10px, node_font_8px)
 
+    # -------
+    # 修复属性
+    node_tabs_height = dom.getElementById('tabs_height')
+    node_tabs_height.setAttribute('value', '19')
+
 
 def _modify_light_theme_xml():
     file_path = os.path.join(data_dir, 'theme.xml')

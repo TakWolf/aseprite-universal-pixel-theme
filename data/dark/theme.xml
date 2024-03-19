@@ -16,7 +16,7 @@
         <dim id="scrollbar_size" value="12" />
         <dim id="mini_scrollbar_size" value="6" />
         <dim id="tabs_width" value="80" />
-        <dim id="tabs_height" value="17" />
+        <dim id="tabs_height" value="19" />
         <dim id="tabs_bottom_height" value="5" />
         <dim id="docked_tabs_height" value="12" />
         <dim id="tabs_close_icon_width" value="14" />
