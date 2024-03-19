@@ -2,6 +2,8 @@ import logging
 import os.path
 from xml.dom.minidom import Document, Element, Node
 
+from fontTools.ttLib import TTFont
+
 from scripts import project_root_dir, assets_dir, data_dir
 from scripts.utils import fs_util
 
@@ -102,6 +104,29 @@ def _modify_dark_theme_xml():
     fs_util.write_xml(dom, file_path)
 
 
+def _modify_fonts(font_size: int, ascent: int, descent: int):
+    fonts_dir = os.path.join(data_dir, 'fonts', str(font_size))
+    for file_name in os.listdir(fonts_dir):
+        if not file_name.endswith('.otf'):
+            continue
+        file_path = os.path.join(fonts_dir, file_name)
+
+        font = TTFont(file_path)
+        px_to_units = 100
+
+        hhea = font['hhea']
+        hhea.ascent = ascent * px_to_units
+        hhea.descent = descent * px_to_units
+
+        os2 = font['OS/2']
+        os2.sTypoAscender = ascent * px_to_units
+        os2.sTypoDescender = descent * px_to_units
+        os2.usWinAscent = ascent * px_to_units
+        os2.usWinDescent = -descent * px_to_units
+
+        font.save(file_path)
+
+
 def main():
     fs_util.delete_dir(data_dir)
     fs_util.make_dir(data_dir)
@@ -111,6 +136,8 @@ def main():
     _copy_others()
     _modify_light_theme_xml()
     _modify_dark_theme_xml()
+    _modify_fonts(10, 11, -3)
+    _modify_fonts(8, 8, -2)
 
 
 if __name__ == '__main__':

@@ -1,1 +1,2 @@
 requests==2.31.0
+fonttools==4.50.0
