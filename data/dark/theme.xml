@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<theme name="Default Dark" screenscaling="2" uiscaling="1">
+<theme name="Universal Pixel Dark" screenscaling="2" uiscaling="1">
     <authors>
         <author name="David Capello" url="https://davidcapello.com/" />
         <author name="Ilija Melentijevic" url="https://ilkke.net/" />
         <author name="Nicolas Desilets" url="https://twitter.com/MapleGecko" />
+        <author name="TakWolf" url="https://takwolf.com" />
     </authors>
     <fonts>
-        <font id="default" font="Aseprite" />
-        <font id="mini" font="Aseprite Mini" mnemonics="off" />
+        <font name="fusion-pixel-10px-proportional" type="truetype" antialias="false" file="../fonts/10/fusion-pixel-10px-proportional-zh_hans.otf" />
+        <font name="fusion-pixel-8px-proportional" type="truetype" antialias="false" file="../fonts/8/fusion-pixel-8px-proportional-zh_hans.otf" />
+        <font id="default" font="fusion-pixel-10px-proportional" size="10" />
+        <font id="mini" font="fusion-pixel-8px-proportional" size="8" />
     </fonts>
     <dimensions>
         <dim id="scrollbar_size" value="12" />
