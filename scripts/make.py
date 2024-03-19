@@ -112,6 +112,7 @@ def _modify_fonts(font_size: int, ascent: int, descent: int):
         file_path = os.path.join(fonts_dir, file_name)
 
         font = TTFont(file_path)
+        font.recalcTimestamp = False
         px_to_units = 100
 
         hhea = font['hhea']
