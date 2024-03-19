@@ -1,3 +1,4 @@
 requests==2.31.0
 fonttools==4.50.0
+pypng==0.20220715.0
 markdown==3.6

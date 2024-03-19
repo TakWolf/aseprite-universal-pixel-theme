@@ -2,6 +2,7 @@ import logging
 import os.path
 from xml.dom.minidom import Document, Element, Node
 
+import png
 from fontTools.ttLib import TTFont
 
 from scripts import project_root_dir, assets_dir, data_dir
@@ -133,6 +134,61 @@ def _modify_fonts(font_size: int, ascent: int, descent: int):
         font.save(file_path)
 
 
+def _load_png(
+        file_path: str | bytes | os.PathLike[str] | os.PathLike[bytes],
+) -> tuple[list[list[tuple[int, int, int, int]]], int, int]:
+    width, height, bitmap, _ = png.Reader(filename=file_path).read()
+    data = []
+    for bitmap_row in bitmap:
+        data_row = []
+        for x in range(0, width * 4, 4):
+            red = bitmap_row[x]
+            green = bitmap_row[x + 1]
+            blue = bitmap_row[x + 2]
+            alpha = bitmap_row[x + 3]
+            data_row.append((red, green, blue, alpha))
+        data.append(data_row)
+    return data, width, height
+
+
+def _save_png(
+        data: list[list[tuple[int, int, int, int]]],
+        file_path: str | bytes | os.PathLike[str] | os.PathLike[bytes],
+):
+    bitmap = []
+    for data_row in data:
+        bitmap_row = []
+        for red, green, blue, alpha in data_row:
+            bitmap_row.append(red)
+            bitmap_row.append(green)
+            bitmap_row.append(blue)
+            bitmap_row.append(alpha)
+        bitmap.append(bitmap_row)
+    png.from_array(bitmap, 'RGBA').save(file_path)
+
+
+def _modify_sheet_png(is_dark: bool):
+    static_png_path = os.path.join(assets_dir, 'static')
+    data_png_path = data_dir
+    if is_dark:
+        static_png_path = os.path.join(static_png_path, 'dark')
+        data_png_path = os.path.join(data_png_path, 'dark')
+    static_png_path = os.path.join(static_png_path, 'sheet.png')
+    data_png_path = os.path.join(data_png_path, 'sheet.png')
+
+    static_bitmap, static_width, static_height = _load_png(static_png_path)
+    data_bitmap, data_width, data_height = _load_png(data_png_path)
+    assert static_width == data_width
+    assert static_height == data_height
+    for row, data_row in enumerate(static_bitmap):
+        for col, (red, green, blue, alpha) in enumerate(data_row):
+            if alpha == 0:
+                continue
+            data_bitmap[row][col] = red, green, blue, alpha
+
+    _save_png(data_bitmap, data_png_path)
+
+
 def main():
     fs_util.delete_dir(data_dir)
     fs_util.make_dir(data_dir)
@@ -144,6 +200,8 @@ def main():
     _modify_dark_theme_xml()
     _modify_fonts(10, 11, -3)
     _modify_fonts(8, 8, -2)
+    _modify_sheet_png(False)
+    _modify_sheet_png(True)
 
 
 if __name__ == '__main__':
