@@ -2,7 +2,9 @@ import logging
 import os
 import zipfile
 
-from scripts import build_dir, data_dir
+import markdown
+
+from scripts import project_root_dir, data_dir, build_dir
 from scripts.utils import fs_util
 
 logger = logging.getLogger('release')
@@ -26,11 +28,24 @@ def _make_extension_file():
                 logger.info("Pack file: '%s'", arc_path)
 
 
+def _make_itchio_readme():
+    md_file_path = os.path.join(project_root_dir, 'README.md')
+    with open(md_file_path, 'r', encoding='utf-8') as file:
+        md_text = file.read()
+    md_text = md_text.replace('](docs/', '](https://raw.githubusercontent.com/TakWolf/aseprite-universal-pixel-theme/master/docs/')
+    html = markdown.markdown(md_text)
+    html_file_path = os.path.join(build_dir, 'itchio-readme.html')
+    with open(html_file_path, 'w', encoding='utf-8') as file:
+        file.write(html)
+        file.write('\n')
+
+
 def main():
     fs_util.delete_dir(build_dir)
     fs_util.make_dir(build_dir)
 
     _make_extension_file()
+    _make_itchio_readme()
 
 
 if __name__ == '__main__':
