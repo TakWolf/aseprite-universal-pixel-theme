@@ -98,6 +98,19 @@ def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str):
     node_dim_tabs_height = _xml_get_item_node_by_id(node_dimensions, 'tabs_height')
     node_dim_tabs_height.setAttribute('value', '19')
 
+    node_parts = dom.getElementsByTagName('parts')[0]
+
+    node_part_window = _xml_get_item_node_by_id(node_parts, 'window')
+    node_part_window.setAttribute('h1', '18')
+
+    node_styles = dom.getElementsByTagName('styles')[0]
+
+    node_style_window_with_title = _xml_get_item_node_by_id(node_styles, 'window_with_title')
+    node_style_window_with_title.setAttribute('border-top', '18')
+
+    node_style_window_title_label = _xml_get_item_node_by_id(node_styles, 'window_title_label')
+    node_style_window_title_label.setAttribute('margin-top', '3')
+
 
 def _modify_light_theme_xml():
     file_path = os.path.join(data_dir, 'theme.xml')
