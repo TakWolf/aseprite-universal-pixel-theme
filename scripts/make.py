@@ -109,7 +109,7 @@ def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str):
     node_style_window_with_title.setAttribute('border-top', '18')
 
     node_style_window_title_label = _xml_get_item_node_by_id(node_styles, 'window_title_label')
-    node_style_window_title_label.setAttribute('margin-top', '3')
+    node_style_window_title_label.setAttribute('margin-top', '4')
 
 
 def _modify_light_theme_xml():

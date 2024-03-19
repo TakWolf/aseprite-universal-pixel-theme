@@ -462,7 +462,7 @@
             <background color="window_face" />
             <border part="window" />
         </style>
-        <style id="window_title_label" margin-top="3" margin-left="5">
+        <style id="window_title_label" margin-top="4" margin-left="5">
             <background color="window_titlebar_face" />
             <text color="window_titlebar_text" align="left middle" />
         </style>
