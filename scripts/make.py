@@ -214,8 +214,8 @@ def main():
     _copy_others()
     _modify_light_theme_xml()
     _modify_dark_theme_xml()
-    _modify_fonts(10, 11, -3)
-    _modify_fonts(8, 8, -2)
+    _modify_fonts(10, 10, -2)
+    _modify_fonts(8, 7, -1)
     _modify_sheet_png(False)
     _modify_sheet_png(True)
 
