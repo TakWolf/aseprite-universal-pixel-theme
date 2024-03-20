@@ -4,7 +4,7 @@ import zipfile
 
 import markdown
 
-from scripts import project_root_dir, data_dir, build_dir
+from scripts import project_root_dir, data_dir, releases_dir
 from scripts.utils import fs_util
 
 logger = logging.getLogger('release')
@@ -16,7 +16,7 @@ def _make_extension_file():
     package_name: str = package_info['name']
     package_version: str = package_info['version']
 
-    extension_file_path = os.path.join(build_dir, f'{package_name}-v{package_version}.aseprite-extension')
+    extension_file_path = os.path.join(releases_dir, f'{package_name}-v{package_version}.aseprite-extension')
     with zipfile.ZipFile(extension_file_path, 'w') as file:
         for file_dir, _, file_names in os.walk(data_dir):
             for file_name in file_names:
@@ -34,15 +34,15 @@ def _make_itchio_readme():
         md_text = file.read()
     md_text = md_text.replace('](docs/', '](https://raw.githubusercontent.com/TakWolf/aseprite-universal-pixel-theme/master/docs/')
     html = markdown.markdown(md_text)
-    html_file_path = os.path.join(build_dir, 'itchio-readme.html')
+    html_file_path = os.path.join(releases_dir, 'itchio-readme.html')
     with open(html_file_path, 'w', encoding='utf-8') as file:
         file.write(html)
         file.write('\n')
 
 
 def main():
-    fs_util.delete_dir(build_dir)
-    fs_util.make_dir(build_dir)
+    fs_util.delete_dir(releases_dir)
+    fs_util.make_dir(releases_dir)
 
     _make_extension_file()
     _make_itchio_readme()
