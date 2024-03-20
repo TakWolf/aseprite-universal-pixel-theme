@@ -2,23 +2,10 @@ import logging
 import os
 import zipfile
 
-import requests
-
 from scripts import theme_assets_dir, font_assets_dir, cache_dir
-from scripts.utils import fs_util, github_api
+from scripts.utils import fs_util, github_api, download_util
 
 logger = logging.getLogger('update')
-
-
-def _download_file(url: str, file_path: str):
-    response = requests.get(url, stream=True)
-    assert response.ok, url
-    tmp_file_path = f'{file_path}.download'
-    with open(tmp_file_path, 'wb') as file:
-        for chunk in response.iter_content(chunk_size=512):
-            if chunk is not None:
-                file.write(chunk)
-    os.rename(tmp_file_path, file_path)
 
 
 def _update_aseprite(tag_name: str = None):
@@ -42,7 +29,7 @@ def _update_aseprite(tag_name: str = None):
     asset_url = f'https://github.com/{repository_name}/archive/{tag_name}.zip'
     if not os.path.exists(source_file_path):
         logger.info("Start download: '%s'", asset_url)
-        _download_file(asset_url, source_file_path)
+        download_util.download_file(asset_url, source_file_path)
     else:
         logger.info("Already downloaded: '%s'", source_file_path)
 
@@ -87,7 +74,7 @@ def _update_fonts(tag_name: str = None):
         asset_url = f'https://github.com/{repository_name}/releases/download/{tag_name}/{asset_file_name}'
         if not os.path.exists(asset_file_path):
             logger.info("Start download: '%s'", asset_url)
-            _download_file(asset_url, asset_file_path)
+            download_util.download_file(asset_url, asset_file_path)
         else:
             logger.info("Already downloaded: '%s'", asset_file_path)
 
