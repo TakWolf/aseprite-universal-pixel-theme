@@ -4,7 +4,7 @@ import zipfile
 
 import requests
 
-from scripts import assets_dir, cache_dir
+from scripts import theme_assets_dir, font_assets_dir, cache_dir
 from scripts.utils import fs_util
 
 logger = logging.getLogger('update')
@@ -30,7 +30,6 @@ def _download_file(url: str, file_path: str):
 
 def _update_aseprite(tag_name: str = None):
     repository_name = 'aseprite/aseprite'
-    theme_assets_dir = os.path.join(assets_dir, 'aseprite-theme')
 
     if tag_name is None:
         tag_name = _get_github_releases_latest_tag_name(repository_name)
@@ -73,7 +72,6 @@ def _update_aseprite(tag_name: str = None):
 
 def _update_fonts(tag_name: str = None):
     repository_name = 'TakWolf/fusion-pixel-font'
-    font_assets_dir = os.path.join(assets_dir, 'fusion-pixel-font')
     fs_util.make_dir(font_assets_dir)
 
     if tag_name is None:

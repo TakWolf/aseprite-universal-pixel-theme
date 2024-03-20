@@ -5,14 +5,13 @@ from xml.dom.minidom import Document, Element, Node
 import png
 from fontTools.ttLib import TTFont
 
-from scripts import project_root_dir, assets_dir, data_dir
+from scripts import project_root_dir, static_assets_dir, theme_assets_dir, font_assets_dir, data_dir
 from scripts.utils import fs_util
 
 logger = logging.getLogger('make')
 
 
 def _copy_theme_assets():
-    theme_assets_dir = os.path.join(assets_dir, 'aseprite-theme')
     for dir_from, _, file_names in os.walk(theme_assets_dir):
         for file_name in file_names:
             if not file_name.endswith(('.png', '.xml', '.aseprite-data')):
@@ -24,7 +23,7 @@ def _copy_theme_assets():
 
 def _copy_font_assets():
     for font_size in [8, 10]:
-        dir_from = os.path.join(assets_dir, 'fusion-pixel-font', str(font_size))
+        dir_from = os.path.join(font_assets_dir, str(font_size))
         dir_to = os.path.join(data_dir, 'fonts', str(font_size))
         fs_util.make_dir(dir_to)
         fs_util.copy_the_dir('LICENSE', dir_from, dir_to)
@@ -34,7 +33,7 @@ def _copy_font_assets():
 
 def _copy_others():
     fs_util.copy_the_file('LICENSE', project_root_dir, data_dir)
-    fs_util.copy_the_file('package.json', os.path.join(assets_dir, 'static'), data_dir)
+    fs_util.copy_the_file('package.json', static_assets_dir, data_dir)
 
 
 def _xml_get_item_node_by_id(parent: Element, id_name: str) -> Element | None:
@@ -184,13 +183,12 @@ def _save_png(
 
 
 def _modify_sheet_png(is_dark: bool):
-    static_png_path = os.path.join(assets_dir, 'static')
-    data_png_path = data_dir
     if is_dark:
-        static_png_path = os.path.join(static_png_path, 'dark')
-        data_png_path = os.path.join(data_png_path, 'dark')
-    static_png_path = os.path.join(static_png_path, 'sheet.png')
-    data_png_path = os.path.join(data_png_path, 'sheet.png')
+        static_png_path = os.path.join(static_assets_dir, 'dark', 'sheet.png')
+        data_png_path = os.path.join(data_dir, 'dark', 'sheet.png')
+    else:
+        static_png_path = os.path.join(static_assets_dir, 'sheet.png')
+        data_png_path = os.path.join(data_dir, 'sheet.png')
 
     static_bitmap, static_width, static_height = _load_png(static_png_path)
     data_bitmap, data_width, data_height = _load_png(data_png_path)
