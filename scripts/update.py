@@ -5,16 +5,9 @@ import zipfile
 import requests
 
 from scripts import theme_assets_dir, font_assets_dir, cache_dir
-from scripts.utils import fs_util
+from scripts.utils import fs_util, github_api
 
 logger = logging.getLogger('update')
-
-
-def _get_github_releases_latest_tag_name(repository_name: str) -> str:
-    url = f'https://api.github.com/repos/{repository_name}/releases/latest'
-    response = requests.get(url)
-    assert response.ok, url
-    return response.json()['tag_name']
 
 
 def _download_file(url: str, file_path: str):
@@ -32,7 +25,7 @@ def _update_aseprite(tag_name: str = None):
     repository_name = 'aseprite/aseprite'
 
     if tag_name is None:
-        tag_name = _get_github_releases_latest_tag_name(repository_name)
+        tag_name = github_api.get_releases_latest_tag_name(repository_name)
     version = tag_name.removeprefix('v')
 
     version_file_path = os.path.join(theme_assets_dir, 'version.json')
@@ -75,7 +68,7 @@ def _update_fonts(tag_name: str = None):
     fs_util.make_dir(font_assets_dir)
 
     if tag_name is None:
-        tag_name = _get_github_releases_latest_tag_name(repository_name)
+        tag_name = github_api.get_releases_latest_tag_name(repository_name)
     version = tag_name.removeprefix('v')
 
     version_file_path = os.path.join(font_assets_dir, 'version.json')
