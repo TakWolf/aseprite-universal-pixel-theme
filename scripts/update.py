@@ -36,7 +36,7 @@ def _update_aseprite(tag_name: str = None):
         tag_name = _get_github_releases_latest_tag_name(repository_name)
     version = tag_name.removeprefix('v')
 
-    version_file_path = f'{theme_assets_dir}.json'
+    version_file_path = os.path.join(theme_assets_dir, 'version.json')
     if os.path.exists(version_file_path):
         if version == fs_util.read_json(version_file_path)['version']:
             return
@@ -80,7 +80,7 @@ def _update_fonts(tag_name: str = None):
         tag_name = _get_github_releases_latest_tag_name(repository_name)
     version = tag_name.removeprefix('v')
 
-    version_file_path = f'{font_assets_dir}.json'
+    version_file_path = os.path.join(font_assets_dir, 'version.json')
     if os.path.exists(version_file_path):
         if version == fs_util.read_json(version_file_path)['version']:
             return
