@@ -473,25 +473,25 @@
             <background part="window_button_hot" state="mouse" align="center middle" />
             <background part="window_button_selected" state="selected" align="center middle" />
         </style>
-        <style id="window_close_button" extends="window_button" margin-top="3" margin-right="3">
+        <style id="window_close_button" extends="window_button" margin-top="4" margin-right="3">
             <newlayer />
             <icon part="window_close_icon" color="button_normal_text" />
             <icon part="window_close_icon" color="button_hot_text" state="mouse" />
             <icon part="window_close_icon" color="button_selected_text" state="selected" />
         </style>
-        <style id="window_center_button" extends="window_button" margin-top="3" margin-right="2">
+        <style id="window_center_button" extends="window_button" margin-top="4" margin-right="2">
             <newlayer />
             <icon part="window_center_icon" color="button_normal_text" />
             <icon part="window_center_icon" color="button_hot_text" state="mouse" />
             <icon part="window_center_icon" color="button_selected_text" state="selected" />
         </style>
-        <style id="window_play_button" extends="window_button" margin-top="3" margin-right="2">
+        <style id="window_play_button" extends="window_button" margin-top="4" margin-right="2">
             <newlayer />
             <icon part="window_play_icon" color="button_normal_text" />
             <icon part="window_play_icon" color="button_hot_text" state="mouse" />
             <icon part="window_play_icon" color="button_selected_text" state="selected" />
         </style>
-        <style id="window_stop_button" extends="window_button" margin-top="3" margin-right="2">
+        <style id="window_stop_button" extends="window_button" margin-top="4" margin-right="2">
             <newlayer />
             <icon part="window_stop_icon" color="button_normal_text" />
             <icon part="window_stop_icon" color="button_hot_text" state="mouse" />

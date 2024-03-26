@@ -110,6 +110,18 @@ def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str):
     node_style_window_title_label = _xml_get_item_node_by_id(node_styles, 'window_title_label')
     node_style_window_title_label.setAttribute('margin-top', '4')
 
+    node_style_window_close_button = _xml_get_item_node_by_id(node_styles, 'window_close_button')
+    node_style_window_close_button.setAttribute('margin-top', '4')
+
+    node_style_window_center_button = _xml_get_item_node_by_id(node_styles, 'window_center_button')
+    node_style_window_center_button.setAttribute('margin-top', '4')
+
+    node_style_window_play_button = _xml_get_item_node_by_id(node_styles, 'window_play_button')
+    node_style_window_play_button.setAttribute('margin-top', '4')
+
+    node_style_window_stop_button = _xml_get_item_node_by_id(node_styles, 'window_stop_button')
+    node_style_window_stop_button.setAttribute('margin-top', '4')
+
 
 def _modify_light_theme_xml():
     file_path = os.path.join(data_dir, 'theme.xml')
