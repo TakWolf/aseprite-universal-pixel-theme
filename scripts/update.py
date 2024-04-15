@@ -96,7 +96,7 @@ def _update_fonts(tag_name: str = None):
 
 
 def main():
-    _update_aseprite('v1.3.5')
+    _update_aseprite('v1.3.6')
     _update_fonts()
 
 
