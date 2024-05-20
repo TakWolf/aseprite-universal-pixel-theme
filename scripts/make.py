@@ -163,34 +163,34 @@ def _modify_fonts(font_size: int, ascent: int, descent: int):
 def _load_png(
         file_path: str | bytes | os.PathLike[str] | os.PathLike[bytes],
 ) -> tuple[list[list[tuple[int, int, int, int]]], int, int]:
-    width, height, bitmap, _ = png.Reader(filename=file_path).read()
-    data = []
-    for bitmap_row in bitmap:
-        data_row = []
+    width, height, pixels, _ = png.Reader(filename=file_path).read()
+    bitmap = []
+    for pixels_row in pixels:
+        bitmap_row = []
         for x in range(0, width * 4, 4):
-            red = bitmap_row[x]
-            green = bitmap_row[x + 1]
-            blue = bitmap_row[x + 2]
-            alpha = bitmap_row[x + 3]
-            data_row.append((red, green, blue, alpha))
-        data.append(data_row)
-    return data, width, height
+            red = pixels_row[x]
+            green = pixels_row[x + 1]
+            blue = pixels_row[x + 2]
+            alpha = pixels_row[x + 3]
+            bitmap_row.append((red, green, blue, alpha))
+        bitmap.append(bitmap_row)
+    return bitmap, width, height
 
 
 def _save_png(
-        data: list[list[tuple[int, int, int, int]]],
+        bitmap: list[list[tuple[int, int, int, int]]],
         file_path: str | bytes | os.PathLike[str] | os.PathLike[bytes],
 ):
-    bitmap = []
-    for data_row in data:
-        bitmap_row = []
-        for red, green, blue, alpha in data_row:
-            bitmap_row.append(red)
-            bitmap_row.append(green)
-            bitmap_row.append(blue)
-            bitmap_row.append(alpha)
-        bitmap.append(bitmap_row)
-    png.from_array(bitmap, 'RGBA').save(file_path)
+    pixels = []
+    for bitmap_row in bitmap:
+        pixels_row = []
+        for red, green, blue, alpha in bitmap_row:
+            pixels_row.append(red)
+            pixels_row.append(green)
+            pixels_row.append(blue)
+            pixels_row.append(alpha)
+        pixels.append(pixels_row)
+    png.from_array(pixels, 'RGBA').save(file_path)
 
 
 def _modify_sheet_png(is_dark: bool):
@@ -205,11 +205,11 @@ def _modify_sheet_png(is_dark: bool):
     data_bitmap, data_width, data_height = _load_png(data_png_path)
     assert static_width == data_width
     assert static_height == data_height
-    for row, data_row in enumerate(static_bitmap):
-        for col, (red, green, blue, alpha) in enumerate(data_row):
+    for y, bitmap_row in enumerate(static_bitmap):
+        for x, (red, green, blue, alpha) in enumerate(bitmap_row):
             if alpha == 0:
                 continue
-            data_bitmap[row][col] = red, green, blue, alpha
+            data_bitmap[y][x] = red, green, blue, alpha
 
     _save_png(data_bitmap, data_png_path)
 
