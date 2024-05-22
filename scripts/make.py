@@ -1,5 +1,6 @@
 import logging
-import os.path
+import os
+import shutil
 from xml.dom.minidom import Document, Element, Node
 
 import png
@@ -14,26 +15,27 @@ logger = logging.getLogger('make')
 def _copy_theme_assets():
     for dir_from, _, file_names in os.walk(theme_assets_dir):
         dir_to = dir_from.replace(theme_assets_dir, data_dir, 1)
-        fs_util.make_dir(dir_to)
+        os.makedirs(dir_to, exist_ok=True)
         for file_name in file_names:
             if not file_name.endswith(('.png', '.xml', '.aseprite-data')):
                 continue
-            fs_util.copy_the_file(file_name, dir_from, dir_to)
+            shutil.copyfile(os.path.join(dir_from, file_name), os.path.join(dir_to, file_name))
 
 
 def _copy_font_assets():
     for font_size in [8, 10]:
         dir_from = os.path.join(font_assets_dir, str(font_size))
         dir_to = os.path.join(data_dir, 'fonts', str(font_size))
-        fs_util.make_dir(dir_to)
-        fs_util.copy_the_dir('LICENSE', dir_from, dir_to)
-        fs_util.copy_the_file('OFL.txt', dir_from, dir_to)
-        fs_util.copy_the_file(f'fusion-pixel-{font_size}px-proportional-zh_hans.otf', dir_from, dir_to)
+        os.makedirs(dir_to)
+        shutil.copytree(os.path.join(dir_from, 'LICENSE'), os.path.join(dir_to, 'LICENSE'))
+        shutil.copyfile(os.path.join(dir_from, 'OFL.txt'), os.path.join(dir_to, 'OFL.txt'))
+        font_file_name = f'fusion-pixel-{font_size}px-proportional-zh_hans.otf'
+        shutil.copyfile(os.path.join(dir_from, font_file_name), os.path.join(dir_to, font_file_name))
 
 
 def _copy_others():
-    fs_util.copy_the_file('LICENSE', project_root_dir, data_dir)
-    fs_util.copy_the_file('package.json', static_assets_dir, data_dir)
+    shutil.copyfile(os.path.join(project_root_dir, 'LICENSE'), os.path.join(data_dir, 'LICENSE'))
+    shutil.copyfile(os.path.join(static_assets_dir, 'package.json'), os.path.join(data_dir, 'package.json'))
 
 
 def _xml_get_item_node_by_id(parent: Element, id_name: str) -> Element | None:
@@ -216,7 +218,7 @@ def _modify_sheet_png(is_dark: bool):
 
 def main():
     fs_util.delete_dir(data_dir)
-    fs_util.make_dir(data_dir)
+    os.makedirs(data_dir)
 
     _copy_theme_assets()
     _copy_font_assets()

@@ -39,7 +39,7 @@ def _make_itchio_readme():
 
 def main():
     fs_util.delete_dir(releases_dir)
-    fs_util.make_dir(releases_dir)
+    os.makedirs(releases_dir)
 
     _make_extension_file()
     _make_itchio_readme()

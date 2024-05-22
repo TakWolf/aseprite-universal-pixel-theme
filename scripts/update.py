@@ -23,7 +23,7 @@ def _update_aseprite(tag_name: str = None):
     logger.info("Need update theme to version: '%s'", version_url)
 
     download_dir = os.path.join(cache_dir, repository_name, tag_name)
-    fs_util.make_dir(download_dir)
+    os.makedirs(download_dir, exist_ok=True)
 
     source_file_path = os.path.join(download_dir, 'source.zip')
     asset_url = f'https://github.com/{repository_name}/archive/{tag_name}.zip'
@@ -52,7 +52,7 @@ def _update_aseprite(tag_name: str = None):
 
 def _update_fonts(tag_name: str = None):
     repository_name = 'TakWolf/fusion-pixel-font'
-    fs_util.make_dir(font_assets_dir)
+    os.makedirs(font_assets_dir, exist_ok=True)
 
     if tag_name is None:
         tag_name = github_api.get_releases_latest_tag_name(repository_name)
@@ -66,7 +66,7 @@ def _update_fonts(tag_name: str = None):
     logger.info("Need update fonts to version: '%s'", version_url)
 
     download_dir = os.path.join(cache_dir, repository_name, tag_name)
-    fs_util.make_dir(download_dir)
+    os.makedirs(download_dir, exist_ok=True)
 
     for font_size in [8, 10]:
         asset_file_name = f'fusion-pixel-font-{font_size}px-proportional-otf-v{version}.zip'
