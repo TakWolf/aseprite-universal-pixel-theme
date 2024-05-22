@@ -1,17 +1,17 @@
 import logging
-import os
+from pathlib import Path
 
 logging.basicConfig(level=logging.DEBUG)
 
-project_root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+project_root_dir = Path(__file__).parent.joinpath('..').resolve()
 
-assets_dir = os.path.join(project_root_dir, 'assets')
-static_assets_dir = os.path.join(assets_dir, 'static')
-theme_assets_dir = os.path.join(assets_dir, 'aseprite-theme')
-font_assets_dir = os.path.join(assets_dir, 'fusion-pixel-font')
+assets_dir = project_root_dir.joinpath('assets')
+static_assets_dir = assets_dir.joinpath('static')
+theme_assets_dir = assets_dir.joinpath('aseprite-theme')
+font_assets_dir = assets_dir.joinpath('fusion-pixel-font')
 
-data_dir = os.path.join(project_root_dir, 'data')
+data_dir = project_root_dir.joinpath('data')
 
-build_dir = os.path.join(project_root_dir, 'build')
-cache_dir = os.path.join(build_dir, 'cache')
-releases_dir = os.path.join(build_dir, 'releases')
+build_dir = project_root_dir.joinpath('build')
+cache_dir = build_dir.joinpath('cache')
+releases_dir = build_dir.joinpath('releases')

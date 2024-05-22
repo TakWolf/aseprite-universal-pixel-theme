@@ -1,6 +1,6 @@
 import logging
-import os
 import shutil
+from pathlib import Path
 from xml.dom.minidom import Document, Element, Node
 
 import png
@@ -13,29 +13,29 @@ logger = logging.getLogger('make')
 
 
 def _copy_theme_assets():
-    for dir_from, _, file_names in os.walk(theme_assets_dir):
-        dir_to = dir_from.replace(theme_assets_dir, data_dir, 1)
-        os.makedirs(dir_to, exist_ok=True)
+    for dir_from, _, file_names in theme_assets_dir.walk():
+        dir_to = data_dir.joinpath(dir_from.relative_to(theme_assets_dir))
+        dir_to.mkdir(exist_ok=True)
         for file_name in file_names:
             if not file_name.endswith(('.png', '.xml', '.aseprite-data')):
                 continue
-            shutil.copyfile(os.path.join(dir_from, file_name), os.path.join(dir_to, file_name))
+            shutil.copyfile(dir_from.joinpath(file_name), dir_to.joinpath(file_name))
 
 
 def _copy_font_assets():
     for font_size in [8, 10]:
-        dir_from = os.path.join(font_assets_dir, str(font_size))
-        dir_to = os.path.join(data_dir, 'fonts', str(font_size))
-        os.makedirs(dir_to)
-        shutil.copytree(os.path.join(dir_from, 'LICENSE'), os.path.join(dir_to, 'LICENSE'))
-        shutil.copyfile(os.path.join(dir_from, 'OFL.txt'), os.path.join(dir_to, 'OFL.txt'))
+        dir_from = font_assets_dir.joinpath(str(font_size))
+        dir_to = data_dir.joinpath('fonts', str(font_size))
+        dir_to.mkdir(parents=True)
+        shutil.copytree(dir_from.joinpath('LICENSE'), dir_to.joinpath('LICENSE'))
+        shutil.copyfile(dir_from.joinpath('OFL.txt'), dir_to.joinpath('OFL.txt'))
         font_file_name = f'fusion-pixel-{font_size}px-proportional-zh_hans.otf'
-        shutil.copyfile(os.path.join(dir_from, font_file_name), os.path.join(dir_to, font_file_name))
+        shutil.copyfile(dir_from.joinpath(font_file_name), dir_to.joinpath(font_file_name))
 
 
 def _copy_others():
-    shutil.copyfile(os.path.join(project_root_dir, 'LICENSE'), os.path.join(data_dir, 'LICENSE'))
-    shutil.copyfile(os.path.join(static_assets_dir, 'package.json'), os.path.join(data_dir, 'package.json'))
+    shutil.copyfile(project_root_dir.joinpath('LICENSE'), data_dir.joinpath('LICENSE'))
+    shutil.copyfile(static_assets_dir.joinpath('package.json'), data_dir.joinpath('package.json'))
 
 
 def _xml_get_item_node_by_id(parent: Element, id_name: str) -> Element | None:
@@ -126,25 +126,24 @@ def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str):
 
 
 def _modify_light_theme_xml():
-    file_path = os.path.join(data_dir, 'theme.xml')
+    file_path = data_dir.joinpath('theme.xml')
     dom = fs_util.read_xml(file_path)
     _modify_theme_xml(dom, 'Universal Pixel Light', '.')
     fs_util.write_xml(dom, file_path)
 
 
 def _modify_dark_theme_xml():
-    file_path = os.path.join(data_dir, 'dark', 'theme.xml')
+    file_path = data_dir.joinpath('dark', 'theme.xml')
     dom = fs_util.read_xml(file_path)
     _modify_theme_xml(dom, 'Universal Pixel Dark', '..')
     fs_util.write_xml(dom, file_path)
 
 
 def _modify_fonts(font_size: int, ascent: int, descent: int):
-    fonts_dir = os.path.join(data_dir, 'fonts', str(font_size))
-    for file_name in os.listdir(fonts_dir):
-        if not file_name.endswith('.otf'):
+    fonts_dir = data_dir.joinpath('fonts', str(font_size))
+    for file_path in fonts_dir.iterdir():
+        if file_path.suffix != '.otf':
             continue
-        file_path = os.path.join(fonts_dir, file_name)
 
         font = TTFont(file_path, recalcTimestamp=False)
         px_to_units = 100
@@ -162,9 +161,7 @@ def _modify_fonts(font_size: int, ascent: int, descent: int):
         font.save(file_path)
 
 
-def _load_png(
-        file_path: str | bytes | os.PathLike[str] | os.PathLike[bytes],
-) -> tuple[list[list[tuple[int, int, int, int]]], int, int]:
+def _load_png(file_path: Path) -> tuple[list[list[tuple[int, int, int, int]]], int, int]:
     width, height, pixels, _ = png.Reader(filename=file_path).read()
     bitmap = []
     for pixels_row in pixels:
@@ -179,10 +176,7 @@ def _load_png(
     return bitmap, width, height
 
 
-def _save_png(
-        bitmap: list[list[tuple[int, int, int, int]]],
-        file_path: str | bytes | os.PathLike[str] | os.PathLike[bytes],
-):
+def _save_png(bitmap: list[list[tuple[int, int, int, int]]], file_path: Path):
     pixels = []
     for bitmap_row in bitmap:
         pixels_row = []
@@ -197,11 +191,11 @@ def _save_png(
 
 def _modify_sheet_png(is_dark: bool):
     if is_dark:
-        static_png_path = os.path.join(static_assets_dir, 'dark', 'sheet.png')
-        data_png_path = os.path.join(data_dir, 'dark', 'sheet.png')
+        static_png_path = static_assets_dir.joinpath('dark', 'sheet.png')
+        data_png_path = data_dir.joinpath('dark', 'sheet.png')
     else:
-        static_png_path = os.path.join(static_assets_dir, 'sheet.png')
-        data_png_path = os.path.join(data_dir, 'sheet.png')
+        static_png_path = static_assets_dir.joinpath('sheet.png')
+        data_png_path = data_dir.joinpath('sheet.png')
 
     static_bitmap, static_width, static_height = _load_png(static_png_path)
     data_bitmap, data_width, data_height = _load_png(data_png_path)
@@ -218,7 +212,7 @@ def _modify_sheet_png(is_dark: bool):
 
 def main():
     fs_util.delete_dir(data_dir)
-    os.makedirs(data_dir)
+    data_dir.mkdir()
 
     _copy_theme_assets()
     _copy_font_assets()
