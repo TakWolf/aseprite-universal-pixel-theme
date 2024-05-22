@@ -30,14 +30,11 @@ def _make_extension_file():
 
 def _make_itchio_readme():
     md_file_path = os.path.join(project_root_dir, 'README.md')
-    with open(md_file_path, 'r', encoding='utf-8') as file:
-        md_text = file.read()
+    md_text = fs_util.read_str(md_file_path)
     md_text = md_text.replace('](docs/', '](https://raw.githubusercontent.com/TakWolf/aseprite-universal-pixel-theme/master/docs/')
     html = markdown.markdown(md_text)
     html_file_path = os.path.join(releases_dir, 'itchio-readme.html')
-    with open(html_file_path, 'w', encoding='utf-8') as file:
-        file.write(html)
-        file.write('\n')
+    fs_util.write_str(f'{html}\n', html_file_path)
 
 
 def main():
