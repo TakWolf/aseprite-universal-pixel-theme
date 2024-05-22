@@ -13,11 +13,11 @@ logger = logging.getLogger('make')
 
 def _copy_theme_assets():
     for dir_from, _, file_names in os.walk(theme_assets_dir):
+        dir_to = dir_from.replace(theme_assets_dir, data_dir, 1)
+        fs_util.make_dir(dir_to)
         for file_name in file_names:
             if not file_name.endswith(('.png', '.xml', '.aseprite-data')):
                 continue
-            dir_to = dir_from.replace(theme_assets_dir, data_dir, 1)
-            fs_util.make_dir(dir_to)
             fs_util.copy_the_file(file_name, dir_from, dir_to)
 
 
