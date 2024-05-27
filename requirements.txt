@@ -1,4 +1,4 @@
-requests==2.32.1
-fonttools==4.51.0
+requests==2.32.2
+fonttools==4.52.4
 pypng==0.20220715.0
-markdown==3.6
+Markdown==3.6
