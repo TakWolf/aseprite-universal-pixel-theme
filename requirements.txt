@@ -1,4 +1,4 @@
-requests==2.32.2
+httpx==0.27.0
 fonttools==4.52.4
 pypng==0.20220715.0
 Markdown==3.6
