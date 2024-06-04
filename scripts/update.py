@@ -7,7 +7,7 @@ from scripts.utils import fs_util, github_api, download_util
 logger = logging.getLogger('update')
 
 
-def _update_aseprite(tag_name: str = None):
+def _update_aseprite(tag_name: str | None = None):
     repository_name = 'aseprite/aseprite'
 
     if tag_name is None:
@@ -49,7 +49,7 @@ def _update_aseprite(tag_name: str = None):
     }, version_file_path)
 
 
-def _update_fonts(tag_name: str = None):
+def _update_fonts(tag_name: str | None = None):
     repository_name = 'TakWolf/fusion-pixel-font'
     font_assets_dir.mkdir(parents=True, exist_ok=True)
 
