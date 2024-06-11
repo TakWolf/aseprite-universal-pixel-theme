@@ -4,7 +4,7 @@ import zipfile
 from scripts import theme_assets_dir, font_assets_dir, cache_dir
 from scripts.utils import fs_util, github_api, download_util
 
-logger = logging.getLogger('update')
+logger = logging.getLogger(__name__)
 
 
 def _update_aseprite(tag_name: str | None = None):

@@ -9,7 +9,7 @@ from fontTools.ttLib import TTFont
 from scripts import project_root_dir, static_assets_dir, theme_assets_dir, font_assets_dir, data_dir
 from scripts.utils import fs_util
 
-logger = logging.getLogger('make')
+logger = logging.getLogger(__name__)
 
 
 def _copy_theme_assets():
