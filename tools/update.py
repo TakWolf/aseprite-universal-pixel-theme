@@ -1,8 +1,8 @@
 import logging
 import zipfile
 
-from scripts import theme_assets_dir, font_assets_dir, cache_dir
-from scripts.utils import fs_util, github_api, download_util
+from tools import theme_assets_dir, font_assets_dir, cache_dir
+from tools.utils import fs_util, github_api, download_util
 
 logger = logging.getLogger(__name__)
 

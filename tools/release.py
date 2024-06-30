@@ -3,8 +3,8 @@ import zipfile
 
 import markdown
 
-from scripts import project_root_dir, data_dir, releases_dir
-from scripts.utils import fs_util
+from tools import project_root_dir, data_dir, releases_dir
+from tools.utils import fs_util
 
 logger = logging.getLogger(__name__)
 

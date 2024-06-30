@@ -6,8 +6,8 @@ from xml.dom.minidom import Document, Element, Node
 import png
 from fontTools.ttLib import TTFont
 
-from scripts import project_root_dir, static_assets_dir, theme_assets_dir, font_assets_dir, data_dir
-from scripts.utils import fs_util
+from tools import project_root_dir, static_assets_dir, theme_assets_dir, font_assets_dir, data_dir
+from tools.utils import fs_util
 
 logger = logging.getLogger(__name__)
 
