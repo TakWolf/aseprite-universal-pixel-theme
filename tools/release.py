@@ -1,12 +1,9 @@
-import logging
 import zipfile
 
 import markdown
 
 from tools import project_root_dir, data_dir, releases_dir
 from tools.utils import fs_util
-
-logger = logging.getLogger(__name__)
 
 
 def _make_extension_file():
@@ -24,7 +21,7 @@ def _make_extension_file():
                 file_path = file_dir.joinpath(file_name)
                 arc_path = file_path.relative_to(data_dir)
                 file.write(file_path, arc_path)
-                logger.info("Pack file: '%s'", arc_path)
+                print(f"Pack file: '{arc_path}'")
 
 
 def _make_itchio_readme():

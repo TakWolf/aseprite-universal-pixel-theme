@@ -1,4 +1,3 @@
-import logging
 import shutil
 from pathlib import Path
 from xml.dom.minidom import Document, Element, Node
@@ -8,8 +7,6 @@ from fontTools.ttLib import TTFont
 
 from tools import project_root_dir, static_assets_dir, theme_assets_dir, font_assets_dir, data_dir
 from tools.utils import fs_util
-
-logger = logging.getLogger(__name__)
 
 
 def _copy_theme_assets():

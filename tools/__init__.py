@@ -1,7 +1,4 @@
-import logging
 from pathlib import Path
-
-logging.basicConfig(level=logging.INFO)
 
 project_root_dir = Path(__file__).parent.joinpath('..').resolve()
 
