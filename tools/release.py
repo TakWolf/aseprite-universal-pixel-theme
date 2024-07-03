@@ -1,3 +1,4 @@
+import shutil
 import zipfile
 
 import markdown
@@ -34,7 +35,8 @@ def _make_itchio_readme():
 
 
 def main():
-    fs_util.delete_dir(releases_dir)
+    if releases_dir.exists():
+        shutil.rmtree(releases_dir)
     releases_dir.mkdir(parents=True)
 
     _make_extension_file()

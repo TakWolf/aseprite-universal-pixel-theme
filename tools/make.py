@@ -208,7 +208,8 @@ def _modify_sheet_png(is_dark: bool):
 
 
 def main():
-    fs_util.delete_dir(data_dir)
+    if data_dir.exists():
+        shutil.rmtree(data_dir)
     data_dir.mkdir()
 
     _copy_theme_assets()

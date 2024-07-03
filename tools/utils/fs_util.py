@@ -1,15 +1,9 @@
 import json
 import os
-import shutil
 import xml.dom.minidom
 from pathlib import Path
 from typing import Any
 from xml.dom.minidom import Document
-
-
-def delete_dir(path: Path):
-    if path.exists():
-        shutil.rmtree(path)
 
 
 def read_json(path: Path) -> Any:

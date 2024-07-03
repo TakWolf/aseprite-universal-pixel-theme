@@ -1,3 +1,4 @@
+import shutil
 import zipfile
 
 from tools import theme_assets_dir, font_assets_dir, cache_dir
@@ -30,15 +31,18 @@ def _update_aseprite(tag_name: str | None = None):
         print(f"Already downloaded: '{source_file_path}'")
 
     source_unzip_dir = download_dir.joinpath(f'aseprite-{version}')
-    fs_util.delete_dir(source_unzip_dir)
+    if source_unzip_dir.exists():
+        shutil.rmtree(source_unzip_dir)
     with zipfile.ZipFile(source_file_path) as file:
         file.extractall(download_dir)
     print(f"Unzip: '{source_unzip_dir}'")
 
-    fs_util.delete_dir(theme_assets_dir)
+    if theme_assets_dir.exists():
+        shutil.rmtree(theme_assets_dir)
     source_unzip_dir.joinpath('data', 'extensions', 'aseprite-theme').rename(theme_assets_dir)
     print(f"Update assets: '{theme_assets_dir}'")
-    fs_util.delete_dir(source_unzip_dir)
+    if source_unzip_dir.exists():
+        shutil.rmtree(source_unzip_dir)
 
     fs_util.write_json({
         'version': version,
@@ -75,13 +79,15 @@ def _update_fonts(tag_name: str | None = None):
             print(f"Already downloaded: '{asset_file_path}'")
 
         asset_unzip_dir = asset_file_path.with_suffix('')
-        fs_util.delete_dir(asset_unzip_dir)
+        if asset_unzip_dir.exists():
+            shutil.rmtree(asset_unzip_dir)
         with zipfile.ZipFile(asset_file_path) as file:
             file.extractall(asset_unzip_dir)
         print(f"Unzip: '{asset_unzip_dir}'")
 
         font_size_dir = font_assets_dir.joinpath(str(font_size))
-        fs_util.delete_dir(font_size_dir)
+        if font_size_dir.exists():
+            shutil.rmtree(font_size_dir)
         asset_unzip_dir.rename(font_size_dir)
         print(f"Update assets: '{font_size_dir}'")
 
