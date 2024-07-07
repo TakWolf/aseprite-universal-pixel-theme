@@ -1,4 +1,6 @@
+import os
 import shutil
+import xml
 from pathlib import Path
 from xml.dom.minidom import Document, Element, Node
 
@@ -6,7 +8,6 @@ import png
 from fontTools.ttLib import TTFont
 
 from tools import project_root_dir, static_assets_dir, theme_assets_dir, font_assets_dir, data_dir
-from tools.utils import fs_util
 
 
 def _copy_theme_assets():
@@ -33,6 +34,20 @@ def _copy_font_assets():
 def _copy_others():
     shutil.copyfile(project_root_dir.joinpath('LICENSE'), data_dir.joinpath('LICENSE'))
     shutil.copyfile(static_assets_dir.joinpath('package.json'), data_dir.joinpath('package.json'))
+
+
+def _read_xml(path: Path) -> Document:
+    return xml.dom.minidom.parse(os.fspath(path))
+
+
+def _write_xml(dom: Document, path: Path):
+    xml_str = dom.toprettyxml(indent=' ' * 4, newl='\n', encoding='utf-8')
+    with path.open('wb') as file:
+        for line in xml_str.splitlines():
+            if line.strip() == b'':
+                continue
+            file.write(line.replace(b'?>', b' ?>').replace(b'/>', b' />'))
+            file.write(b'\n')
 
 
 def _xml_get_item_node_by_id(parent: Element, id_name: str) -> Element | None:
@@ -124,16 +139,16 @@ def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str):
 
 def _modify_light_theme_xml():
     file_path = data_dir.joinpath('theme.xml')
-    dom = fs_util.read_xml(file_path)
+    dom = _read_xml(file_path)
     _modify_theme_xml(dom, 'Universal Pixel Light', '.')
-    fs_util.write_xml(dom, file_path)
+    _write_xml(dom, file_path)
 
 
 def _modify_dark_theme_xml():
     file_path = data_dir.joinpath('dark', 'theme.xml')
-    dom = fs_util.read_xml(file_path)
+    dom = _read_xml(file_path)
     _modify_theme_xml(dom, 'Universal Pixel Dark', '..')
-    fs_util.write_xml(dom, file_path)
+    _write_xml(dom, file_path)
 
 
 def _modify_fonts(font_size: int, ascent: int, descent: int):

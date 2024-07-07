@@ -1,8 +1,9 @@
+import json
 import shutil
 import zipfile
 
 from tools import theme_assets_dir, font_assets_dir, cache_dir
-from tools.utils import fs_util, github_api, download_util
+from tools.utils import github_api, download_util
 
 
 def _update_aseprite(tag_name: str | None = None):
@@ -14,7 +15,7 @@ def _update_aseprite(tag_name: str | None = None):
 
     version_file_path = theme_assets_dir.joinpath('version.json')
     if version_file_path.exists():
-        if version == fs_util.read_json(version_file_path)['version']:
+        if version == json.loads(version_file_path.read_bytes())['version']:
             return
     version_url = f'https://github.com/{repository_name}/releases/tag/{tag_name}'
     print(f"Need update theme to version: '{version_url}'")
@@ -44,10 +45,10 @@ def _update_aseprite(tag_name: str | None = None):
     if source_unzip_dir.exists():
         shutil.rmtree(source_unzip_dir)
 
-    fs_util.write_json({
+    version_file_path.write_text(f'{json.dumps({
         'version': version,
         'version_url': version_url,
-    }, version_file_path)
+    }, indent=2, ensure_ascii=False)}\n', 'utf-8')
 
 
 def _update_fonts(tag_name: str | None = None):
@@ -60,7 +61,7 @@ def _update_fonts(tag_name: str | None = None):
 
     version_file_path = font_assets_dir.joinpath('version.json')
     if version_file_path.exists():
-        if version == fs_util.read_json(version_file_path)['version']:
+        if version == json.loads(version_file_path.read_bytes())['version']:
             return
     version_url = f'https://github.com/{repository_name}/releases/tag/{tag_name}'
     print(f"Need update fonts to version: '{version_url}'")
@@ -91,10 +92,10 @@ def _update_fonts(tag_name: str | None = None):
         asset_unzip_dir.rename(font_size_dir)
         print(f"Update assets: '{font_size_dir}'")
 
-    fs_util.write_json({
+    version_file_path.write_text(f'{json.dumps({
         'version': version,
         'version_url': version_url,
-    }, version_file_path)
+    }, indent=2, ensure_ascii=False)}\n', 'utf-8')
 
 
 def main():

@@ -1,15 +1,15 @@
+import json
 import shutil
 import zipfile
 
 import markdown
 
 from tools import project_root_dir, data_dir, releases_dir
-from tools.utils import fs_util
 
 
 def _make_extension_file():
     package_json_file_path = data_dir.joinpath('package.json')
-    package_info = fs_util.read_json(package_json_file_path)
+    package_info = json.loads(package_json_file_path.read_bytes())
     package_name = package_info['name']
     package_version = package_info['version']
 
