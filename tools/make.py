@@ -136,6 +136,9 @@ def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str):
     node_style_window_stop_button = _xml_get_item_node_by_id(node_styles, 'window_stop_button')
     node_style_window_stop_button.setAttribute('margin-top', '4')
 
+    node_style_window_stop_button = _xml_get_item_node_by_id(node_styles, 'window_help_button')
+    node_style_window_stop_button.setAttribute('margin-top', '4')
+
 
 def _modify_light_theme_xml():
     file_path = data_dir.joinpath('theme.xml')
