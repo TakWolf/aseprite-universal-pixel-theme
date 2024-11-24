@@ -228,7 +228,7 @@ def _modify_sheet_png(is_dark: bool):
 def main():
     if data_dir.exists():
         shutil.rmtree(data_dir)
-    data_dir.mkdir()
+    data_dir.mkdir(parents=True)
 
     _copy_theme_assets()
     _copy_font_assets()

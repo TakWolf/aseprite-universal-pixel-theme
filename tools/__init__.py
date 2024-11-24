@@ -7,8 +7,8 @@ static_assets_dir = assets_dir.joinpath('static')
 theme_assets_dir = assets_dir.joinpath('aseprite-theme')
 font_assets_dir = assets_dir.joinpath('fusion-pixel-font')
 
-data_dir = project_root_dir.joinpath('data')
+cache_dir = project_root_dir.joinpath('cache')
 
 build_dir = project_root_dir.joinpath('build')
-cache_dir = build_dir.joinpath('cache')
+data_dir = build_dir.joinpath('data')
 releases_dir = build_dir.joinpath('releases')
