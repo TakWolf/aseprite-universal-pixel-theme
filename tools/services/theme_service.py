@@ -7,12 +7,12 @@ from xml.dom.minidom import Document, Element, Node
 import png
 from fontTools.ttLib import TTFont
 
-from tools import project_root_dir, static_assets_dir, theme_assets_dir, font_assets_dir, data_dir
+from tools.configs import path_define, FontFlavor
 
 
-def _copy_theme_assets():
-    for dir_from, _, file_names in theme_assets_dir.walk():
-        dir_to = data_dir.joinpath(dir_from.relative_to(theme_assets_dir))
+def _copy_theme_assets(data_dir: Path):
+    for dir_from, _, file_names in path_define.theme_assets_dir.walk():
+        dir_to = data_dir.joinpath(dir_from.relative_to(path_define.theme_assets_dir))
         dir_to.mkdir(exist_ok=True)
         for file_name in file_names:
             if not file_name.endswith(('.png', '.xml', '.aseprite-data')):
@@ -20,20 +20,20 @@ def _copy_theme_assets():
             shutil.copyfile(dir_from.joinpath(file_name), dir_to.joinpath(file_name))
 
 
-def _copy_font_assets():
+def _copy_font_assets(data_dir: Path, font_flavor: FontFlavor):
     for font_size in [8, 10]:
-        dir_from = font_assets_dir.joinpath(str(font_size))
+        dir_from = path_define.font_assets_dir.joinpath(str(font_size))
         dir_to = data_dir.joinpath('fonts', str(font_size))
         dir_to.mkdir(parents=True)
         shutil.copytree(dir_from.joinpath('LICENSE'), dir_to.joinpath('LICENSE'))
         shutil.copyfile(dir_from.joinpath('OFL.txt'), dir_to.joinpath('OFL.txt'))
-        font_file_name = f'fusion-pixel-{font_size}px-proportional-zh_hans.otf'
+        font_file_name = f'fusion-pixel-{font_size}px-proportional-{font_flavor}.otf'
         shutil.copyfile(dir_from.joinpath(font_file_name), dir_to.joinpath(font_file_name))
 
 
-def _copy_others():
-    shutil.copyfile(project_root_dir.joinpath('LICENSE'), data_dir.joinpath('LICENSE'))
-    shutil.copyfile(static_assets_dir.joinpath('package.json'), data_dir.joinpath('package.json'))
+def _copy_others(data_dir: Path):
+    shutil.copyfile(path_define.project_root_dir.joinpath('LICENSE'), data_dir.joinpath('LICENSE'))
+    shutil.copyfile(path_define.static_assets_dir.joinpath('package.json'), data_dir.joinpath('package.json'))
 
 
 def _read_xml(path: Path) -> Document:
@@ -61,7 +61,7 @@ def _xml_get_item_node_by_id(parent: Element, id_name: str) -> Element | None:
     return None
 
 
-def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str):
+def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str, font_flavor: FontFlavor):
     # ----------
     # 修改主题名称
     node_theme = dom.firstChild
@@ -84,13 +84,13 @@ def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str):
     node_font_10px.setAttribute('name', 'fusion-pixel-10px-proportional')
     node_font_10px.setAttribute('type', 'truetype')
     node_font_10px.setAttribute('antialias', 'false')
-    node_font_10px.setAttribute('file', f'{relative_path}/fonts/10/fusion-pixel-10px-proportional-zh_hans.otf')
+    node_font_10px.setAttribute('file', f'{relative_path}/fonts/10/fusion-pixel-10px-proportional-{font_flavor}.otf')
 
     node_font_8px = dom.createElement('font')
     node_font_8px.setAttribute('name', 'fusion-pixel-8px-proportional')
     node_font_8px.setAttribute('type', 'truetype')
     node_font_8px.setAttribute('antialias', 'false')
-    node_font_8px.setAttribute('file', f'{relative_path}/fonts/8/fusion-pixel-8px-proportional-zh_hans.otf')
+    node_font_8px.setAttribute('file', f'{relative_path}/fonts/8/fusion-pixel-8px-proportional-{font_flavor}.otf')
 
     node_font_default = _xml_get_item_node_by_id(node_fonts, 'default')
     node_font_default.setAttribute('font', node_font_10px.getAttribute('name'))
@@ -140,21 +140,21 @@ def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str):
     node_style_window_stop_button.setAttribute('margin-top', '4')
 
 
-def _modify_light_theme_xml():
+def _modify_light_theme_xml(data_dir: Path, font_flavor: FontFlavor):
     file_path = data_dir.joinpath('theme.xml')
     dom = _read_xml(file_path)
-    _modify_theme_xml(dom, 'Universal Pixel Light', '.')
+    _modify_theme_xml(dom, 'Universal Pixel Light', '.', font_flavor)
     _write_xml(dom, file_path)
 
 
-def _modify_dark_theme_xml():
+def _modify_dark_theme_xml(data_dir: Path, font_flavor: FontFlavor):
     file_path = data_dir.joinpath('dark', 'theme.xml')
     dom = _read_xml(file_path)
-    _modify_theme_xml(dom, 'Universal Pixel Dark', '..')
+    _modify_theme_xml(dom, 'Universal Pixel Dark', '..', font_flavor)
     _write_xml(dom, file_path)
 
 
-def _modify_fonts(font_size: int, ascent: int, descent: int):
+def _modify_fonts(data_dir: Path, font_size: int, ascent: int, descent: int):
     fonts_dir = data_dir.joinpath('fonts', str(font_size))
     for file_path in fonts_dir.iterdir():
         if file_path.suffix != '.otf':
@@ -204,12 +204,12 @@ def _save_png(bitmap: list[list[tuple[int, int, int, int]]], file_path: Path):
     png.from_array(pixels, 'RGBA').save(file_path)
 
 
-def _modify_sheet_png(is_dark: bool):
+def _modify_sheet_png(data_dir: Path, is_dark: bool):
     if is_dark:
-        static_png_path = static_assets_dir.joinpath('dark', 'sheet.png')
+        static_png_path = path_define.static_assets_dir.joinpath('dark', 'sheet.png')
         data_png_path = data_dir.joinpath('dark', 'sheet.png')
     else:
-        static_png_path = static_assets_dir.joinpath('sheet.png')
+        static_png_path = path_define.static_assets_dir.joinpath('sheet.png')
         data_png_path = data_dir.joinpath('sheet.png')
 
     static_bitmap, static_width, static_height = _load_png(static_png_path)
@@ -225,21 +225,19 @@ def _modify_sheet_png(is_dark: bool):
     _save_png(data_bitmap, data_png_path)
 
 
-def main():
+def make_theme(font_flavor: FontFlavor):
+    data_dir = path_define.data_dir.joinpath(font_flavor)
     if data_dir.exists():
         shutil.rmtree(data_dir)
     data_dir.mkdir(parents=True)
 
-    _copy_theme_assets()
-    _copy_font_assets()
-    _copy_others()
-    _modify_light_theme_xml()
-    _modify_dark_theme_xml()
-    _modify_fonts(10, 10, -2)
-    _modify_fonts(8, 7, -1)
-    _modify_sheet_png(False)
-    _modify_sheet_png(True)
-
-
-if __name__ == '__main__':
-    main()
+    _copy_theme_assets(data_dir)
+    _copy_font_assets(data_dir, font_flavor)
+    _copy_others(data_dir)
+    _modify_light_theme_xml(data_dir, font_flavor)
+    _modify_dark_theme_xml(data_dir, font_flavor)
+    _modify_fonts(data_dir, 10, 10, -2)
+    _modify_fonts(data_dir, 8, 7, -1)
+    _modify_sheet_png(data_dir, False)
+    _modify_sheet_png(data_dir, True)
+    print(f"Make theme: '{data_dir}'")
