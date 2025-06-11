@@ -2,7 +2,7 @@ from tools.services import update_service
 
 
 def main():
-    update_service.update_aseprite_theme('v1.3.13')
+    update_service.update_aseprite_theme('v1.3.14')
     update_service.update_fonts()
 
 
