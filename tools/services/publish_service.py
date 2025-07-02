@@ -3,7 +3,8 @@ import zipfile
 
 import markdown
 
-from tools.configs import path_define, FontFlavor
+from tools.configs import path_define
+from tools.configs.options import FontFlavor
 
 
 def make_extension(font_flavor: FontFlavor):

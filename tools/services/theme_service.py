@@ -7,7 +7,8 @@ from xml.dom.minidom import Document, Element, Node
 import png
 from fontTools.ttLib import TTFont
 
-from tools.configs import path_define, FontFlavor
+from tools.configs import path_define
+from tools.configs.options import FontFlavor
 
 
 def _copy_theme_assets(data_dir: Path):
