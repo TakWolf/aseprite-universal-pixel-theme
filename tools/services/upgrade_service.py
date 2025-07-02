@@ -6,7 +6,7 @@ from tools.configs import path_define
 from tools.utils import github_api, download_util
 
 
-def update_aseprite_theme(tag_name: str | None = None):
+def upgrade_aseprite_theme(tag_name: str | None = None):
     repository_name = 'aseprite/aseprite'
 
     if tag_name is None:
@@ -18,7 +18,7 @@ def update_aseprite_theme(tag_name: str | None = None):
         if version == json.loads(version_file_path.read_bytes())['version']:
             return
     version_url = f'https://github.com/{repository_name}/releases/tag/{tag_name}'
-    print(f"Need update theme to version: '{version_url}'")
+    print(f"Need upgrade theme to version: '{version_url}'")
 
     download_dir = path_define.cache_dir.joinpath(repository_name, tag_name)
     download_dir.mkdir(parents=True, exist_ok=True)
@@ -51,7 +51,7 @@ def update_aseprite_theme(tag_name: str | None = None):
     }, indent=2, ensure_ascii=False)}\n', 'utf-8')
 
 
-def update_fonts(tag_name: str | None = None):
+def upgrade_fonts(tag_name: str | None = None):
     repository_name = 'TakWolf/fusion-pixel-font'
     path_define.font_assets_dir.mkdir(parents=True, exist_ok=True)
 
@@ -64,7 +64,7 @@ def update_fonts(tag_name: str | None = None):
         if version == json.loads(version_file_path.read_bytes())['version']:
             return
     version_url = f'https://github.com/{repository_name}/releases/tag/{tag_name}'
-    print(f"Need update fonts to version: '{version_url}'")
+    print(f"Need upgrade fonts to version: '{version_url}'")
 
     download_dir = path_define.cache_dir.joinpath(repository_name, tag_name)
     download_dir.mkdir(parents=True, exist_ok=True)
