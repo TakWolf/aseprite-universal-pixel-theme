@@ -15,7 +15,8 @@ def upgrade_aseprite_theme(tag_name: str | None = None):
 
     version_file_path = path_define.theme_assets_dir.joinpath('version.json')
     if version_file_path.exists():
-        if version == json.loads(version_file_path.read_bytes())['version']:
+        version_info = json.loads(version_file_path.read_bytes())
+        if version == version_info['version']:
             return
     version_url = f'https://github.com/{repository_name}/releases/tag/{tag_name}'
     print(f"Need upgrade theme to version: '{version_url}'")
@@ -45,10 +46,11 @@ def upgrade_aseprite_theme(tag_name: str | None = None):
     if source_unzip_dir.exists():
         shutil.rmtree(source_unzip_dir)
 
-    version_file_path.write_text(f'{json.dumps({
+    version_info = {
         'version': version,
         'version_url': version_url,
-    }, indent=2, ensure_ascii=False)}\n', 'utf-8')
+    }
+    version_file_path.write_text(f'{json.dumps(version_info, indent=2, ensure_ascii=False)}\n', 'utf-8')
 
 
 def upgrade_fonts(tag_name: str | None = None):
@@ -61,7 +63,8 @@ def upgrade_fonts(tag_name: str | None = None):
 
     version_file_path = path_define.font_assets_dir.joinpath('version.json')
     if version_file_path.exists():
-        if version == json.loads(version_file_path.read_bytes())['version']:
+        version_info = json.loads(version_file_path.read_bytes())
+        if version == version_info['version']:
             return
     version_url = f'https://github.com/{repository_name}/releases/tag/{tag_name}'
     print(f"Need upgrade fonts to version: '{version_url}'")
@@ -92,7 +95,8 @@ def upgrade_fonts(tag_name: str | None = None):
         asset_unzip_dir.rename(font_size_dir)
         print(f"Update assets: '{font_size_dir}'")
 
-    version_file_path.write_text(f'{json.dumps({
+    version_info = {
         'version': version,
         'version_url': version_url,
-    }, indent=2, ensure_ascii=False)}\n', 'utf-8')
+    }
+    version_file_path.write_text(f'{json.dumps(version_info, indent=2, ensure_ascii=False)}\n', 'utf-8')
