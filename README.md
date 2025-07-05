@@ -9,19 +9,15 @@
 
 ## 概述
 
-[Aseprite](https://github.com/aseprite/aseprite) 从 [v1.3.3](https://github.com/aseprite/aseprite/releases/tag/v1.3.3) 开始，已内置 [官方翻译](https://github.com/aseprite/strings)。
+[Aseprite](https://github.com/aseprite/aseprite) 默认主题支持的字符相当有限，基本上仅覆盖基础西文字母，对东亚字符显示糟糕。
 
-但是其 [内置的像素字体](https://github.com/aseprite/aseprite/tree/main/data/fonts) 支持的字符相当有限，基本上仅覆盖基础西文字母。
-
-因此，我们尝试基于 [默认主题](https://github.com/aseprite/aseprite/tree/main/data/extensions/aseprite-theme) 进行改造，在尽可能保留原始主题外观的情况下，使其支持多语言。
+因此，我们尝试基于 [默认主题](https://github.com/aseprite/aseprite/tree/main/data/extensions/aseprite-theme) 进行改造，在尽可能保留原始主题外观的情况下，使其支持多语言字符显示。
 
 ## 预览
 
-字体部分由 [「缝合像素字体」](https://github.com/TakWolf/fusion-pixel-font) 提供支持。
+以下仅列出经过测试的语言。
 
-目前大体支持下列展示的语言。其他语言虽未列出，但有可能也受到支持。
-
-如果出现缺字情况，或需要支持其他语言，请在 [Issues](https://github.com/TakWolf/aseprite-universal-pixel-theme/issues) 提交反馈。
+其他语言虽未列出，但有可能也受到支持。
 
 ### 英文
 
