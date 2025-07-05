@@ -73,7 +73,7 @@ def upgrade_fonts(tag_name: str | None = None):
     download_dir.mkdir(parents=True, exist_ok=True)
 
     for font_size in [8, 10]:
-        asset_file_name = f'fusion-pixel-font-{font_size}px-proportional-otf-v{version}.zip'
+        asset_file_name = f'fusion-pixel-font-{font_size}px-proportional-ttf-v{version}.zip'
         asset_file_path = download_dir.joinpath(asset_file_name)
         asset_url = f'https://github.com/{repository_name}/releases/download/{tag_name}/{asset_file_name}'
         if not asset_file_path.exists():

@@ -28,7 +28,7 @@ def _copy_font_assets(data_dir: Path, font_flavor: FontFlavor):
         dir_to.mkdir(parents=True)
         shutil.copytree(dir_from.joinpath('LICENSE'), dir_to.joinpath('LICENSE'))
         shutil.copyfile(dir_from.joinpath('OFL.txt'), dir_to.joinpath('OFL.txt'))
-        font_file_name = f'fusion-pixel-{font_size}px-proportional-{font_flavor}.otf'
+        font_file_name = f'fusion-pixel-{font_size}px-proportional-{font_flavor}.ttf'
         shutil.copyfile(dir_from.joinpath(font_file_name), dir_to.joinpath(font_file_name))
 
 
@@ -86,14 +86,14 @@ def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str, font_f
     node_font_10px.setAttribute('type', 'truetype')
     node_font_10px.setAttribute('antialias', 'false')
     node_font_10px.setAttribute('hinting', 'false')
-    node_font_10px.setAttribute('file', f'{relative_path}/fonts/10/fusion-pixel-10px-proportional-{font_flavor}.otf')
+    node_font_10px.setAttribute('file', f'{relative_path}/fonts/10/fusion-pixel-10px-proportional-{font_flavor}.ttf')
 
     node_font_8px = dom.createElement('font')
     node_font_8px.setAttribute('name', 'fusion-pixel-8px-proportional')
     node_font_8px.setAttribute('type', 'truetype')
     node_font_8px.setAttribute('antialias', 'false')
     node_font_8px.setAttribute('hinting', 'false')
-    node_font_8px.setAttribute('file', f'{relative_path}/fonts/8/fusion-pixel-8px-proportional-{font_flavor}.otf')
+    node_font_8px.setAttribute('file', f'{relative_path}/fonts/8/fusion-pixel-8px-proportional-{font_flavor}.ttf')
 
     node_font_default = _xml_get_item_node_by_id(node_fonts, 'default')
     node_font_default.setAttribute('font', node_font_10px.getAttribute('name'))
@@ -160,7 +160,7 @@ def _modify_dark_theme_xml(data_dir: Path, font_flavor: FontFlavor):
 def _modify_fonts(data_dir: Path, font_size: int, ascent: int, descent: int):
     fonts_dir = data_dir.joinpath('fonts', str(font_size))
     for file_path in fonts_dir.iterdir():
-        if file_path.suffix != '.otf':
+        if file_path.suffix != '.ttf':
             continue
 
         font = TTFont(file_path, recalcTimestamp=False)
