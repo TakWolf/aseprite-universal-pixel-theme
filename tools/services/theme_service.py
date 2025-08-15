@@ -1,11 +1,10 @@
-import os
 import shutil
-import xml
 from pathlib import Path
-from xml.dom.minidom import Document, Element, Node
 
 import png
 from fontTools.ttLib import TTFont
+from lxml import etree
+from lxml.etree import XMLParser, Element, SubElement
 
 from tools.configs import path_define
 from tools.configs.options import FontFlavor
@@ -37,124 +36,106 @@ def _copy_others(data_dir: Path):
     shutil.copyfile(path_define.static_assets_dir.joinpath('package.json'), data_dir.joinpath('package.json'))
 
 
-def _read_xml(path: Path) -> Document:
-    return xml.dom.minidom.parse(os.fspath(path))
-
-
-def _write_xml(dom: Document, path: Path):
-    xml_str = dom.toprettyxml(indent=' ' * 4, newl='\n', encoding='utf-8')
-    with path.open('wb') as file:
-        for line in xml_str.splitlines():
-            if line.strip() == b'':
-                continue
-            file.write(line.replace(b'?>', b' ?>').replace(b'/>', b' />'))
-            file.write(b'\n')
-
-
-def _xml_get_item_node_by_id(parent: Element, id_name: str) -> Element | None:
-    for child in parent.childNodes:
-        if child.nodeType != Node.ELEMENT_NODE:
+def _xml_get_child_element_by_id(parent: Element, id_name: str) -> Element | None:
+    for child in parent:
+        if 'id' not in child.attrib:
             continue
-        if not child.hasAttribute('id'):
-            continue
-        if child.getAttribute('id') == id_name:
+        if child.get('id') == id_name:
             return child
     return None
 
 
-def _modify_theme_xml(dom: Document, theme_name: str, relative_path: str, font_flavor: FontFlavor):
-    # ----------
-    # 修改主题名称
-    node_theme = dom.firstChild
-    node_theme.setAttribute('name', theme_name)
+def _modify_theme_xml(path: Path, theme_name: str, relative_path: str, font_flavor: FontFlavor):
+    # 读取主题
+    elem_root = etree.parse(path, XMLParser(remove_blank_text=True)).getroot()
+    elem_root.set('name', theme_name)
 
     # -------
     # 补充作者
-    node_authors = dom.getElementsByTagName('authors')[0]
+    elem_authors = elem_root.xpath('/theme/authors')[0]
 
-    node_author_takwolf = dom.createElement('author')
-    node_author_takwolf.setAttribute('name', 'TakWolf')
-    node_author_takwolf.setAttribute('url', 'https://takwolf.com')
-    node_authors.appendChild(node_author_takwolf)
+    elem_author_takwolf = SubElement(elem_authors, 'author')
+    elem_author_takwolf.set('name', 'TakWolf')
+    elem_author_takwolf.set('url', 'https://takwolf.com')
 
     # -------
     # 修改字体
-    node_fonts = dom.getElementsByTagName('fonts')[0]
+    elem_fonts = elem_root.xpath('/theme/fonts')[0]
 
-    node_font_10px = dom.createElement('font')
-    node_font_10px.setAttribute('name', 'fusion-pixel-10px-proportional')
-    node_font_10px.setAttribute('type', 'truetype')
-    node_font_10px.setAttribute('antialias', 'false')
-    node_font_10px.setAttribute('hinting', 'false')
-    node_font_10px.setAttribute('file', f'{relative_path}/fonts/10/fusion-pixel-10px-proportional-{font_flavor}.ttf')
+    elem_font_10px = Element('font')
+    elem_font_10px.set('name', 'fusion-pixel-10px-proportional')
+    elem_font_10px.set('type', 'truetype')
+    elem_font_10px.set('antialias', 'false')
+    elem_font_10px.set('hinting', 'false')
+    elem_font_10px.set('file', f'{relative_path}/fonts/10/fusion-pixel-10px-proportional-{font_flavor}.ttf')
+    elem_fonts.insert(0, elem_font_10px)
 
-    node_font_8px = dom.createElement('font')
-    node_font_8px.setAttribute('name', 'fusion-pixel-8px-proportional')
-    node_font_8px.setAttribute('type', 'truetype')
-    node_font_8px.setAttribute('antialias', 'false')
-    node_font_8px.setAttribute('hinting', 'false')
-    node_font_8px.setAttribute('file', f'{relative_path}/fonts/8/fusion-pixel-8px-proportional-{font_flavor}.ttf')
+    elem_font_8px = Element('font')
+    elem_font_8px.set('name', 'fusion-pixel-8px-proportional')
+    elem_font_8px.set('type', 'truetype')
+    elem_font_8px.set('antialias', 'false')
+    elem_font_8px.set('hinting', 'false')
+    elem_font_8px.set('file', f'{relative_path}/fonts/8/fusion-pixel-8px-proportional-{font_flavor}.ttf')
+    elem_fonts.insert(1, elem_font_8px)
 
-    node_font_default = _xml_get_item_node_by_id(node_fonts, 'default')
-    node_font_default.setAttribute('font', node_font_10px.getAttribute('name'))
-    node_font_default.setAttribute('size', '10')
+    elem_font_default = _xml_get_child_element_by_id(elem_fonts, 'default')
+    elem_font_default.set('font', elem_font_10px.get('name'))
+    elem_font_default.set('size', '10')
 
-    node_font_mini = _xml_get_item_node_by_id(node_fonts, 'mini')
-    node_font_mini.setAttribute('font', node_font_8px.getAttribute('name'))
-    node_font_mini.setAttribute('size', '8')
-    node_font_mini.removeAttribute('mnemonics')
-
-    node_fonts.insertBefore(node_font_8px, node_font_default)
-    node_fonts.insertBefore(node_font_10px, node_font_8px)
+    elem_font_mini = _xml_get_child_element_by_id(elem_fonts, 'mini')
+    elem_font_mini.set('font', elem_font_8px.get('name'))
+    elem_font_mini.set('size', '8')
+    elem_font_mini.attrib.pop('mnemonics')
 
     # -------
     # 修复属性
-    node_dimensions = dom.getElementsByTagName('dimensions')[0]
+    elem_dimensions = elem_root.xpath('/theme/dimensions')[0]
 
-    node_dim_tabs_height = _xml_get_item_node_by_id(node_dimensions, 'tabs_height')
-    node_dim_tabs_height.setAttribute('value', '19')
+    elem_dim_tabs_height = _xml_get_child_element_by_id(elem_dimensions, 'tabs_height')
+    elem_dim_tabs_height.set('value', '19')
 
-    node_parts = dom.getElementsByTagName('parts')[0]
+    elem_parts = elem_root.xpath('/theme/parts')[0]
 
-    node_part_window = _xml_get_item_node_by_id(node_parts, 'window')
-    node_part_window.setAttribute('h1', '18')
+    elem_part_window = _xml_get_child_element_by_id(elem_parts, 'window')
+    elem_part_window.set('h1', '18')
 
-    node_styles = dom.getElementsByTagName('styles')[0]
+    elem_styles = elem_root.xpath('/theme/styles')[0]
 
-    node_style_window_with_title = _xml_get_item_node_by_id(node_styles, 'window_with_title')
-    node_style_window_with_title.setAttribute('border-top', '18')
+    elem_style_window_with_title = _xml_get_child_element_by_id(elem_styles, 'window_with_title')
+    elem_style_window_with_title.set('border-top', '18')
 
-    node_style_window_title_label = _xml_get_item_node_by_id(node_styles, 'window_title_label')
-    node_style_window_title_label.setAttribute('margin-top', '4')
+    elem_style_window_title_label = _xml_get_child_element_by_id(elem_styles, 'window_title_label')
+    elem_style_window_title_label.set('margin-top', '4')
 
-    node_style_window_close_button = _xml_get_item_node_by_id(node_styles, 'window_close_button')
-    node_style_window_close_button.setAttribute('margin-top', '4')
+    elem_style_window_close_button = _xml_get_child_element_by_id(elem_styles, 'window_close_button')
+    elem_style_window_close_button.set('margin-top', '4')
 
-    node_style_window_center_button = _xml_get_item_node_by_id(node_styles, 'window_center_button')
-    node_style_window_center_button.setAttribute('margin-top', '4')
+    elem_style_window_center_button = _xml_get_child_element_by_id(elem_styles, 'window_center_button')
+    elem_style_window_center_button.set('margin-top', '4')
 
-    node_style_window_play_button = _xml_get_item_node_by_id(node_styles, 'window_play_button')
-    node_style_window_play_button.setAttribute('margin-top', '4')
+    elem_style_window_play_button = _xml_get_child_element_by_id(elem_styles, 'window_play_button')
+    elem_style_window_play_button.set('margin-top', '4')
 
-    node_style_window_stop_button = _xml_get_item_node_by_id(node_styles, 'window_stop_button')
-    node_style_window_stop_button.setAttribute('margin-top', '4')
+    elem_style_window_stop_button = _xml_get_child_element_by_id(elem_styles, 'window_stop_button')
+    elem_style_window_stop_button.set('margin-top', '4')
 
-    node_style_window_stop_button = _xml_get_item_node_by_id(node_styles, 'window_help_button')
-    node_style_window_stop_button.setAttribute('margin-top', '4')
+    elem_style_window_stop_button = _xml_get_child_element_by_id(elem_styles, 'window_help_button')
+    elem_style_window_stop_button.set('margin-top', '4')
+
+    # 写入主题
+    etree.indent(elem_root, space='    ')
+    xml_str = etree.tostring(elem_root, encoding='utf-8', doctype='<?xml version="1.0" encoding="utf-8" ?>').replace(b'/>', b' />') + b'\n'
+    path.write_bytes(xml_str)
 
 
 def _modify_light_theme_xml(data_dir: Path, font_flavor: FontFlavor):
     file_path = data_dir.joinpath('theme.xml')
-    dom = _read_xml(file_path)
-    _modify_theme_xml(dom, 'Universal Pixel Light', '.', font_flavor)
-    _write_xml(dom, file_path)
+    _modify_theme_xml(file_path, 'Universal Pixel Light', '.', font_flavor)
 
 
 def _modify_dark_theme_xml(data_dir: Path, font_flavor: FontFlavor):
     file_path = data_dir.joinpath('dark', 'theme.xml')
-    dom = _read_xml(file_path)
-    _modify_theme_xml(dom, 'Universal Pixel Dark', '..', font_flavor)
-    _write_xml(dom, file_path)
+    _modify_theme_xml(file_path, 'Universal Pixel Dark', '..', font_flavor)
 
 
 def _modify_fonts(data_dir: Path, font_size: int, ascent: int, descent: int):
