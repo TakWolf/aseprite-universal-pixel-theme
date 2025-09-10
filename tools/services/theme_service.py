@@ -124,7 +124,7 @@ def _modify_theme_xml(path: Path, theme_name: str, relative_path: str, font_flav
 
     # 写入主题
     etree.indent(elem_root, space='    ')
-    xml_str = etree.tostring(elem_root, encoding='utf-8', doctype='<?xml version="1.0" encoding="utf-8" ?>').replace(b'/>', b' />') + b'\n'
+    xml_str = etree.tostring(elem_root, encoding='utf-8', doctype='<?xml version="1.0" encoding="utf-8" ?>') + b'\n'
     path.write_bytes(xml_str)
 
 
