@@ -1,6 +1,0 @@
-httpx[http2]==0.28.1
-tqdm==4.67.1
-lxml==6.0.2
-fonttools==4.60.1
-pypng==0.20220715.0
-markdown==3.9
