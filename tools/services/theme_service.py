@@ -17,7 +17,7 @@ def _copy_theme_assets(data_dir: Path):
         for file_name in file_names:
             if not file_name.endswith(('.png', '.xml', '.aseprite-data')):
                 continue
-            shutil.copyfile(dir_from.joinpath(file_name), dir_to.joinpath(file_name))
+            dir_from.joinpath(file_name).copy_into(dir_to)
 
 
 def _copy_font_assets(data_dir: Path, font_flavor: FontFlavor):
@@ -25,15 +25,14 @@ def _copy_font_assets(data_dir: Path, font_flavor: FontFlavor):
         dir_from = path_define.font_assets_dir.joinpath(str(font_size))
         dir_to = data_dir.joinpath('fonts', str(font_size))
         dir_to.mkdir(parents=True)
-        shutil.copytree(dir_from.joinpath('LICENSE'), dir_to.joinpath('LICENSE'))
-        shutil.copyfile(dir_from.joinpath('OFL.txt'), dir_to.joinpath('OFL.txt'))
-        font_file_name = f'fusion-pixel-{font_size}px-proportional-{font_flavor}.ttf'
-        shutil.copyfile(dir_from.joinpath(font_file_name), dir_to.joinpath(font_file_name))
+        dir_from.joinpath('OFL.txt').copy_into(dir_to)
+        dir_from.joinpath('LICENSE').copy_into(dir_to)
+        dir_from.joinpath(f'fusion-pixel-{font_size}px-proportional-{font_flavor}.ttf').copy_into(dir_to)
 
 
 def _copy_others(data_dir: Path):
-    shutil.copyfile(path_define.project_root_dir.joinpath('LICENSE'), data_dir.joinpath('LICENSE'))
-    shutil.copyfile(path_define.static_assets_dir.joinpath('package.json'), data_dir.joinpath('package.json'))
+    path_define.project_root_dir.joinpath('LICENSE').copy_into(data_dir)
+    path_define.static_assets_dir.joinpath('package.json').copy_into(data_dir)
 
 
 def _xml_get_child_element_by_id(parent: Element, id_name: str) -> Element | None:
