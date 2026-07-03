@@ -26,7 +26,7 @@ def _copy_font_assets(data_dir: Path, font_flavor: FontFlavor):
         dir_to = data_dir.joinpath('fonts', str(font_size))
         dir_to.mkdir(parents=True)
         dir_from.joinpath('OFL.txt').copy_into(dir_to)
-        dir_from.joinpath('LICENSE').copy_into(dir_to)
+        dir_from.joinpath('LICENSES').copy_into(dir_to)
         dir_from.joinpath(f'fusion-pixel-{font_size}px-proportional-{font_flavor}.ttf').copy_into(dir_to)
 
 
