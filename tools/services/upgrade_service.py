@@ -1,6 +1,6 @@
 import json
 import shutil
-import zipfile
+from zipfile import ZipFile
 
 from tools.configs import path_define
 from tools.utils import github_api, download_util
@@ -35,7 +35,7 @@ def upgrade_aseprite_theme(tag_name: str | None = None):
     source_unzip_dir = download_dir.joinpath(f'aseprite-{version}')
     if source_unzip_dir.exists():
         shutil.rmtree(source_unzip_dir)
-    with zipfile.ZipFile(source_file_path) as file:
+    with ZipFile(source_file_path) as file:
         file.extractall(download_dir)
     print(f"Unzip: '{source_unzip_dir}'")
 
@@ -85,7 +85,7 @@ def upgrade_fonts(tag_name: str | None = None):
         asset_unzip_dir = asset_file_path.with_suffix('')
         if asset_unzip_dir.exists():
             shutil.rmtree(asset_unzip_dir)
-        with zipfile.ZipFile(asset_file_path) as file:
+        with ZipFile(asset_file_path) as file:
             file.extractall(asset_unzip_dir)
         print(f"Unzip: '{asset_unzip_dir}'")
 

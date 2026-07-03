@@ -1,5 +1,5 @@
 import json
-import zipfile
+from zipfile import ZipFile
 
 import markdown
 
@@ -17,7 +17,7 @@ def make_extension(font_flavor: FontFlavor):
 
     path_define.releases_dir.mkdir(parents=True, exist_ok=True)
     extension_file_path = path_define.releases_dir.joinpath(f'{package_name}-{font_flavor}-v{package_version}.aseprite-extension')
-    with zipfile.ZipFile(extension_file_path, 'w') as file:
+    with ZipFile(extension_file_path, 'w') as file:
         for file_dir, _, file_names in data_dir.walk():
             for file_name in file_names:
                 if file_name.startswith('.'):
