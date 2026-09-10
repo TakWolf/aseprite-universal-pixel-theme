@@ -7,4 +7,4 @@ type FontFlavor = Literal[
     'ja',
     'ko',
 ]
-font_flavors = list[FontFlavor](get_args(FontFlavor.__value__))
+FONT_FLAVORS = list[FontFlavor](get_args(FontFlavor.__value__))

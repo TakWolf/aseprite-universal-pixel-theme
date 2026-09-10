@@ -1,14 +1,14 @@
 from pathlib import Path
 
-project_root_dir = Path(__file__).parent.joinpath('..', '..').resolve()
+PROJECT_ROOT_DIR = Path(__file__).parent.joinpath('..', '..').resolve()
 
-assets_dir = project_root_dir.joinpath('assets')
-static_assets_dir = assets_dir.joinpath('static')
-theme_assets_dir = assets_dir.joinpath('aseprite-theme')
-font_assets_dir = assets_dir.joinpath('fusion-pixel-font')
+ASSETS_DIR = PROJECT_ROOT_DIR.joinpath('assets')
+STATIC_ASSETS_DIR = ASSETS_DIR.joinpath('static')
+THEME_ASSETS_DIR = ASSETS_DIR.joinpath('aseprite-theme')
+FONT_ASSETS_DIR = ASSETS_DIR.joinpath('fusion-pixel-font')
 
-cache_dir = project_root_dir.joinpath('cache')
+CACHE_DIR = PROJECT_ROOT_DIR.joinpath('cache')
 
-build_dir = project_root_dir.joinpath('build')
-data_dir = build_dir.joinpath('data')
-releases_dir = build_dir.joinpath('releases')
+BUILD_DIR = PROJECT_ROOT_DIR.joinpath('build')
+DATA_DIR = BUILD_DIR.joinpath('data')
+RELEASES_DIR = BUILD_DIR.joinpath('releases')

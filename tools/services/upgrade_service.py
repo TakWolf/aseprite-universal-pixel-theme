@@ -13,7 +13,7 @@ def upgrade_aseprite_theme(tag_name: str | None = None):
         tag_name = github_api.get_releases_latest_tag_name(repository_name)
     version = tag_name.removeprefix('v')
 
-    version_file_path = path_define.theme_assets_dir.joinpath('version.json')
+    version_file_path = path_define.THEME_ASSETS_DIR.joinpath('version.json')
     if version_file_path.exists():
         version_info = json.loads(version_file_path.read_bytes())
         if version == version_info['version']:
@@ -21,7 +21,7 @@ def upgrade_aseprite_theme(tag_name: str | None = None):
     version_url = f'https://github.com/{repository_name}/releases/tag/{tag_name}'
     print(f"Need upgrade theme to version: '{version_url}'")
 
-    download_dir = path_define.cache_dir.joinpath(repository_name, tag_name)
+    download_dir = path_define.CACHE_DIR.joinpath(repository_name, tag_name)
     download_dir.mkdir(parents=True, exist_ok=True)
 
     source_file_path = download_dir.joinpath('source.zip')
@@ -39,10 +39,10 @@ def upgrade_aseprite_theme(tag_name: str | None = None):
         file.extractall(download_dir)
     print(f"Unzip: '{source_unzip_dir}'")
 
-    if path_define.theme_assets_dir.exists():
-        shutil.rmtree(path_define.theme_assets_dir)
-    source_unzip_dir.joinpath('data', 'extensions', 'aseprite-theme').rename(path_define.theme_assets_dir)
-    print(f"Update assets: '{path_define.theme_assets_dir}'")
+    if path_define.THEME_ASSETS_DIR.exists():
+        shutil.rmtree(path_define.THEME_ASSETS_DIR)
+    source_unzip_dir.joinpath('data', 'extensions', 'aseprite-theme').rename(path_define.THEME_ASSETS_DIR)
+    print(f"Update assets: '{path_define.THEME_ASSETS_DIR}'")
     if source_unzip_dir.exists():
         shutil.rmtree(source_unzip_dir)
 
@@ -55,13 +55,13 @@ def upgrade_aseprite_theme(tag_name: str | None = None):
 
 def upgrade_fonts(tag_name: str | None = None):
     repository_name = 'TakWolf/fusion-pixel-font'
-    path_define.font_assets_dir.mkdir(parents=True, exist_ok=True)
+    path_define.FONT_ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 
     if tag_name is None:
         tag_name = github_api.get_releases_latest_tag_name(repository_name)
     version = tag_name.removeprefix('v')
 
-    version_file_path = path_define.font_assets_dir.joinpath('version.json')
+    version_file_path = path_define.FONT_ASSETS_DIR.joinpath('version.json')
     if version_file_path.exists():
         version_info = json.loads(version_file_path.read_bytes())
         if version == version_info['version']:
@@ -69,7 +69,7 @@ def upgrade_fonts(tag_name: str | None = None):
     version_url = f'https://github.com/{repository_name}/releases/tag/{tag_name}'
     print(f"Need upgrade fonts to version: '{version_url}'")
 
-    download_dir = path_define.cache_dir.joinpath(repository_name, tag_name)
+    download_dir = path_define.CACHE_DIR.joinpath(repository_name, tag_name)
     download_dir.mkdir(parents=True, exist_ok=True)
 
     for font_size in [8, 10]:
@@ -89,7 +89,7 @@ def upgrade_fonts(tag_name: str | None = None):
             file.extractall(asset_unzip_dir)
         print(f"Unzip: '{asset_unzip_dir}'")
 
-        font_size_dir = path_define.font_assets_dir.joinpath(str(font_size))
+        font_size_dir = path_define.FONT_ASSETS_DIR.joinpath(str(font_size))
         if font_size_dir.exists():
             shutil.rmtree(font_size_dir)
         asset_unzip_dir.rename(font_size_dir)

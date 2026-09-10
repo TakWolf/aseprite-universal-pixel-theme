@@ -5,10 +5,10 @@ from tools.services import theme_service, publish_service
 
 
 def main():
-    if path_define.build_dir.exists():
-        shutil.rmtree(path_define.build_dir)
+    if path_define.BUILD_DIR.exists():
+        shutil.rmtree(path_define.BUILD_DIR)
 
-    for font_flavor in options.font_flavors:
+    for font_flavor in options.FONT_FLAVORS:
         theme_service.make_theme(font_flavor)
         publish_service.make_extension(font_flavor)
     publish_service.make_itchio_readme()
