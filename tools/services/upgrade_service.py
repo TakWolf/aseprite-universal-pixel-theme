@@ -6,7 +6,7 @@ from tools.configs import path_define
 from tools.utils import github_api, download_util
 
 
-def upgrade_aseprite_theme(tag_name: str | None = None):
+def upgrade_aseprite_theme(tag_name: str | None = None) -> None:
     repository_name = 'aseprite/aseprite'
 
     if tag_name is None:
@@ -53,7 +53,7 @@ def upgrade_aseprite_theme(tag_name: str | None = None):
     version_file_path.write_text(f'{json.dumps(version_info, indent=2, ensure_ascii=False)}\n', 'utf-8')
 
 
-def upgrade_fonts(tag_name: str | None = None):
+def upgrade_fonts(tag_name: str | None = None) -> None:
     repository_name = 'TakWolf/fusion-pixel-font'
     path_define.FONT_ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 

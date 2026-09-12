@@ -10,7 +10,7 @@ from tools.configs import path_define
 from tools.configs.options import FontFlavor
 
 
-def _copy_theme_assets(data_dir: Path):
+def _copy_theme_assets(data_dir: Path) -> None:
     for dir_from, _, file_names in path_define.THEME_ASSETS_DIR.walk():
         dir_to = data_dir.joinpath(dir_from.relative_to(path_define.THEME_ASSETS_DIR))
         dir_to.mkdir(exist_ok=True)
@@ -20,7 +20,7 @@ def _copy_theme_assets(data_dir: Path):
             dir_from.joinpath(file_name).copy_into(dir_to)
 
 
-def _copy_font_assets(data_dir: Path, font_flavor: FontFlavor):
+def _copy_font_assets(data_dir: Path, font_flavor: FontFlavor) -> None:
     for font_size in [8, 10]:
         dir_from = path_define.FONT_ASSETS_DIR.joinpath(str(font_size))
         dir_to = data_dir.joinpath('fonts', str(font_size))
@@ -30,7 +30,7 @@ def _copy_font_assets(data_dir: Path, font_flavor: FontFlavor):
         dir_from.joinpath(f'fusion-pixel-{font_size}px-proportional-{font_flavor}.ttf').copy_into(dir_to)
 
 
-def _copy_others(data_dir: Path):
+def _copy_others(data_dir: Path) -> None:
     path_define.PROJECT_ROOT_DIR.joinpath('LICENSE').copy_into(data_dir)
     path_define.STATIC_ASSETS_DIR.joinpath('package.json').copy_into(data_dir)
 
@@ -44,7 +44,7 @@ def _xml_get_child_element_by_id(parent: Element, id_name: str) -> Element | Non
     return None
 
 
-def _modify_theme_xml(path: Path, theme_name: str, relative_path: str, font_flavor: FontFlavor):
+def _modify_theme_xml(path: Path, theme_name: str, relative_path: str, font_flavor: FontFlavor) -> None:
     # 读取主题
     elem_root = etree.parse(path, XMLParser(remove_blank_text=True)).getroot()
     elem_root.set('name', theme_name)
@@ -127,17 +127,17 @@ def _modify_theme_xml(path: Path, theme_name: str, relative_path: str, font_flav
     path.write_bytes(xml_str)
 
 
-def _modify_light_theme_xml(data_dir: Path, font_flavor: FontFlavor):
+def _modify_light_theme_xml(data_dir: Path, font_flavor: FontFlavor) -> None:
     file_path = data_dir.joinpath('theme.xml')
     _modify_theme_xml(file_path, 'Universal Pixel Light', '.', font_flavor)
 
 
-def _modify_dark_theme_xml(data_dir: Path, font_flavor: FontFlavor):
+def _modify_dark_theme_xml(data_dir: Path, font_flavor: FontFlavor) -> None:
     file_path = data_dir.joinpath('dark', 'theme.xml')
     _modify_theme_xml(file_path, 'Universal Pixel Dark', '..', font_flavor)
 
 
-def _modify_fonts(data_dir: Path, font_size: int, ascent: int, descent: int):
+def _modify_fonts(data_dir: Path, font_size: int, ascent: int, descent: int) -> None:
     fonts_dir = data_dir.joinpath('fonts', str(font_size))
     for file_path in fonts_dir.iterdir():
         if file_path.suffix != '.ttf':
@@ -174,7 +174,7 @@ def _load_png(file_path: Path) -> tuple[list[list[tuple[int, int, int, int]]], i
     return bitmap, width, height
 
 
-def _save_png(bitmap: list[list[tuple[int, int, int, int]]], file_path: Path):
+def _save_png(bitmap: list[list[tuple[int, int, int, int]]], file_path: Path) -> None:
     pixels = []
     for bitmap_row in bitmap:
         pixels_row = []
@@ -187,7 +187,7 @@ def _save_png(bitmap: list[list[tuple[int, int, int, int]]], file_path: Path):
     png.from_array(pixels, 'RGBA').save(file_path)
 
 
-def _modify_sheet_png(data_dir: Path, is_dark: bool):
+def _modify_sheet_png(data_dir: Path, is_dark: bool) -> None:
     if is_dark:
         static_png_path = path_define.STATIC_ASSETS_DIR.joinpath('dark', 'sheet.png')
         data_png_path = data_dir.joinpath('dark', 'sheet.png')
@@ -208,7 +208,7 @@ def _modify_sheet_png(data_dir: Path, is_dark: bool):
     _save_png(data_bitmap, data_png_path)
 
 
-def make_theme(font_flavor: FontFlavor):
+def make_theme(font_flavor: FontFlavor) -> None:
     data_dir = path_define.DATA_DIR.joinpath(font_flavor)
     if data_dir.exists():
         shutil.rmtree(data_dir)

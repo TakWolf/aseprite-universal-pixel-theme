@@ -1,7 +1,7 @@
 from tools.services import upgrade_service
 
 
-def main():
+def main() -> None:
     upgrade_service.upgrade_aseprite_theme()
     upgrade_service.upgrade_fonts()
 
