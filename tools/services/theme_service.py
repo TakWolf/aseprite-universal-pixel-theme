@@ -118,8 +118,8 @@ def _modify_theme_xml(path: Path, theme_name: str, relative_path: str, font_flav
     elem_style_window_stop_button = _xml_get_child_element_by_id(elem_styles, 'window_stop_button')
     elem_style_window_stop_button.set('margin-top', '4')
 
-    elem_style_window_stop_button = _xml_get_child_element_by_id(elem_styles, 'window_help_button')
-    elem_style_window_stop_button.set('margin-top', '4')
+    elem_style_window_help_button = _xml_get_child_element_by_id(elem_styles, 'window_help_button')
+    elem_style_window_help_button.set('margin-top', '4')
 
     # 写入主题
     etree.indent(elem_root, space='    ')
