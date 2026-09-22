@@ -11,13 +11,16 @@ from tools.configs.options import FontFlavor
 
 
 def _copy_theme_assets(data_dir: Path) -> None:
-    for dir_from, _, file_names in path_define.THEME_ASSETS_DIR.walk():
-        dir_to = data_dir.joinpath(dir_from.relative_to(path_define.THEME_ASSETS_DIR))
-        dir_to.mkdir(exist_ok=True)
-        for file_name in file_names:
-            if not file_name.endswith(('.png', '.xml', '.aseprite-data')):
-                continue
-            dir_from.joinpath(file_name).copy_into(dir_to)
+    for path_from in path_define.THEME_ASSETS_DIR.rglob('*'):
+        if not path_from.is_file():
+            continue
+
+        if path_from.suffix not in ('.png', '.xml', '.aseprite-data'):
+            continue
+
+        dir_to = data_dir.joinpath(path_from.relative_to(path_define.THEME_ASSETS_DIR).parent)
+        dir_to.mkdir(parents=True, exist_ok=True)
+        path_from.copy_into(dir_to)
 
 
 def _copy_font_assets(data_dir: Path, font_flavor: FontFlavor) -> None:
@@ -139,8 +142,8 @@ def _modify_dark_theme_xml(data_dir: Path, font_flavor: FontFlavor) -> None:
 
 def _modify_fonts(data_dir: Path, font_size: int, ascent: int, descent: int) -> None:
     fonts_dir = data_dir.joinpath('fonts', str(font_size))
-    for file_path in fonts_dir.iterdir():
-        if file_path.suffix != '.ttf':
+    for file_path in fonts_dir.glob('*.ttf'):
+        if not file_path.is_file():
             continue
 
         font = TTFont(file_path, recalcTimestamp=False)

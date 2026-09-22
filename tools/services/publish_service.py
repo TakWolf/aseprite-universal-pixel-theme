@@ -18,13 +18,15 @@ def make_extension(font_flavor: FontFlavor) -> None:
     path_define.RELEASES_DIR.mkdir(parents=True, exist_ok=True)
     extension_file_path = path_define.RELEASES_DIR.joinpath(f'{package_name}-{font_flavor}-v{package_version}.aseprite-extension')
     with ZipFile(extension_file_path, 'w') as file:
-        for file_dir, _, file_names in data_dir.walk():
-            for file_name in file_names:
-                if file_name.startswith('.'):
-                    continue
-                file_path = file_dir.joinpath(file_name)
-                arc_path = file_path.relative_to(data_dir)
-                file.write(file_path, arc_path)
+        for file_path in sorted(data_dir.rglob('*')):
+            if not file_path.is_file():
+                continue
+
+            arc_path = file_path.relative_to(data_dir)
+            if any(part.startswith('.') for part in arc_path.parts):
+                continue
+
+            file.write(file_path, arc_path)
     print(f"Make extension: '{extension_file_path}'")
 
 
