@@ -147,19 +147,22 @@ def _modify_fonts(data_dir: Path, font_size: int, ascent: int, descent: int) -> 
             continue
 
         font = TTFont(file_path, recalcTimestamp=False)
-        px_to_units = 100
+        try:
+            px_to_units = 100
 
-        hhea = font['hhea']
-        hhea.ascent = ascent * px_to_units
-        hhea.descent = descent * px_to_units
+            hhea = font['hhea']
+            hhea.ascent = ascent * px_to_units
+            hhea.descent = descent * px_to_units
 
-        os2 = font['OS/2']
-        os2.sTypoAscender = ascent * px_to_units
-        os2.sTypoDescender = descent * px_to_units
-        os2.usWinAscent = ascent * px_to_units
-        os2.usWinDescent = -descent * px_to_units
+            os2 = font['OS/2']
+            os2.sTypoAscender = ascent * px_to_units
+            os2.sTypoDescender = descent * px_to_units
+            os2.usWinAscent = ascent * px_to_units
+            os2.usWinDescent = -descent * px_to_units
 
-        font.save(file_path)
+            font.save(file_path)
+        finally:
+            font.close()
 
 
 def _load_png(file_path: Path) -> tuple[list[list[tuple[int, int, int, int]]], int, int]:
