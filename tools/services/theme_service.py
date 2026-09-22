@@ -35,13 +35,13 @@ def _copy_others(data_dir: Path) -> None:
     path_define.STATIC_ASSETS_DIR.joinpath('package.json').copy_into(data_dir)
 
 
-def _xml_get_child_element_by_id(parent: Element, id_name: str) -> Element | None:
+def _xml_get_child_element_by_id(parent: Element, id_name: str) -> Element:
     for child in parent:
         if 'id' not in child.attrib:
             continue
         if child.get('id') == id_name:
             return child
-    return None
+    raise ValueError(f'element with id {id_name!r} not found')
 
 
 def _modify_theme_xml(path: Path, theme_name: str, relative_path: str, font_flavor: FontFlavor) -> None:
