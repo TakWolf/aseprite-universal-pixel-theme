@@ -1,6 +1,6 @@
 import shutil
 
-from tools.configs import paths, options
+from tools.config import paths, options
 from tools.services import theme_service, publish_service
 
 

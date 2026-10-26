@@ -2,7 +2,7 @@ import json
 import shutil
 from zipfile import ZipFile
 
-from tools.configs import paths
+from tools.config import paths
 from tools.utils import github_api, download_util
 
 
