@@ -3,20 +3,20 @@ from zipfile import ZipFile
 
 import markdown
 
-from tools.configs import path_define
+from tools.configs import paths
 from tools.configs.options import FontFlavor
 
 
 def make_extension(font_flavor: FontFlavor) -> None:
-    data_dir = path_define.DATA_DIR.joinpath(font_flavor)
+    data_dir = paths.DATA_DIR.joinpath(font_flavor)
 
     package_json_file_path = data_dir.joinpath('package.json')
     package_info = json.loads(package_json_file_path.read_bytes())
     package_name = package_info['name']
     package_version = package_info['version']
 
-    path_define.RELEASES_DIR.mkdir(parents=True, exist_ok=True)
-    extension_file_path = path_define.RELEASES_DIR.joinpath(f'{package_name}-{font_flavor}-v{package_version}.aseprite-extension')
+    paths.RELEASES_DIR.mkdir(parents=True, exist_ok=True)
+    extension_file_path = paths.RELEASES_DIR.joinpath(f'{package_name}-{font_flavor}-v{package_version}.aseprite-extension')
     with ZipFile(extension_file_path, 'w') as file:
         for file_path in sorted(data_dir.rglob('*')):
             if not file_path.is_file():
@@ -31,11 +31,11 @@ def make_extension(font_flavor: FontFlavor) -> None:
 
 
 def make_itchio_readme() -> None:
-    md_file_path = path_define.PROJECT_ROOT_DIR.joinpath('README.md')
+    md_file_path = paths.PROJECT_ROOT_DIR.joinpath('README.md')
     md_text = md_file_path.read_text('utf-8')
     md_text = md_text.replace('](docs/', '](https://raw.githubusercontent.com/TakWolf/aseprite-universal-pixel-theme/master/docs/')
     html = markdown.markdown(md_text)
-    path_define.RELEASES_DIR.mkdir(parents=True, exist_ok=True)
-    html_file_path = path_define.RELEASES_DIR.joinpath('itchio-readme.html')
+    paths.RELEASES_DIR.mkdir(parents=True, exist_ok=True)
+    html_file_path = paths.RELEASES_DIR.joinpath('itchio-readme.html')
     html_file_path.write_text(f'{html}\n', 'utf-8')
     print(f"Make itch.io readme: '{html_file_path}'")

@@ -6,26 +6,26 @@ from fontTools.ttLib import TTFont
 from lxml import etree
 from lxml.etree import XMLParser, Element, SubElement
 
-from tools.configs import path_define
+from tools.configs import paths
 from tools.configs.options import FontFlavor
 
 
 def _copy_theme_assets(data_dir: Path) -> None:
-    for path_from in path_define.THEME_ASSETS_DIR.rglob('*'):
+    for path_from in paths.THEME_ASSETS_DIR.rglob('*'):
         if not path_from.is_file():
             continue
 
         if path_from.suffix not in ('.png', '.xml', '.aseprite-data'):
             continue
 
-        dir_to = data_dir.joinpath(path_from.relative_to(path_define.THEME_ASSETS_DIR).parent)
+        dir_to = data_dir.joinpath(path_from.relative_to(paths.THEME_ASSETS_DIR).parent)
         dir_to.mkdir(parents=True, exist_ok=True)
         path_from.copy_into(dir_to)
 
 
 def _copy_font_assets(data_dir: Path, font_flavor: FontFlavor) -> None:
     for font_size in [8, 10]:
-        dir_from = path_define.FONT_ASSETS_DIR.joinpath(str(font_size))
+        dir_from = paths.FONT_ASSETS_DIR.joinpath(str(font_size))
         dir_to = data_dir.joinpath('fonts', str(font_size))
         dir_to.mkdir(parents=True)
         dir_from.joinpath('OFL.txt').copy_into(dir_to)
@@ -34,8 +34,8 @@ def _copy_font_assets(data_dir: Path, font_flavor: FontFlavor) -> None:
 
 
 def _copy_others(data_dir: Path) -> None:
-    path_define.PROJECT_ROOT_DIR.joinpath('LICENSE').copy_into(data_dir)
-    path_define.STATIC_ASSETS_DIR.joinpath('package.json').copy_into(data_dir)
+    paths.PROJECT_ROOT_DIR.joinpath('LICENSE').copy_into(data_dir)
+    paths.STATIC_ASSETS_DIR.joinpath('package.json').copy_into(data_dir)
 
 
 def _xml_get_child_element_by_id(parent: Element, id_name: str) -> Element:
@@ -192,10 +192,10 @@ def _save_png(bitmap: list[list[tuple[int, int, int, int]]], file_path: Path) ->
 
 def _modify_sheet_png(data_dir: Path, is_dark: bool) -> None:
     if is_dark:
-        static_png_path = path_define.STATIC_ASSETS_DIR.joinpath('dark', 'sheet.png')
+        static_png_path = paths.STATIC_ASSETS_DIR.joinpath('dark', 'sheet.png')
         data_png_path = data_dir.joinpath('dark', 'sheet.png')
     else:
-        static_png_path = path_define.STATIC_ASSETS_DIR.joinpath('sheet.png')
+        static_png_path = paths.STATIC_ASSETS_DIR.joinpath('sheet.png')
         data_png_path = data_dir.joinpath('sheet.png')
 
     static_bitmap, static_width, static_height = _load_png(static_png_path)
@@ -212,7 +212,7 @@ def _modify_sheet_png(data_dir: Path, is_dark: bool) -> None:
 
 
 def make_theme(font_flavor: FontFlavor) -> None:
-    data_dir = path_define.DATA_DIR.joinpath(font_flavor)
+    data_dir = paths.DATA_DIR.joinpath(font_flavor)
     if data_dir.exists():
         shutil.rmtree(data_dir)
     data_dir.mkdir(parents=True)
