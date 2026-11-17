@@ -8,6 +8,6 @@ dependencies = [
     "tqdm==4.70.0",
     "lxml==6.1.1",
     "fonttools==4.63.0",
-    "pypng==0.20220715.0",
+    "png==0.0.2",
     "markdown==3.10.3",
 ]

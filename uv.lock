@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.14"
 
 [[package]]
@@ -23,7 +23,7 @@ dependencies = [
     { name = "httpx", extra = ["http2"] },
     { name = "lxml" },
     { name = "markdown" },
-    { name = "pypng" },
+    { name = "png" },
     { name = "tqdm" },
 ]
 
@@ -33,7 +33,7 @@ requires-dist = [
     { name = "httpx", extras = ["http2"], specifier = "==0.28.1" },
     { name = "lxml", specifier = "==6.1.1" },
     { name = "markdown", specifier = "==3.10.3" },
-    { name = "pypng", specifier = "==0.20220715.0" },
+    { name = "png", specifier = "==0.0.2" },
     { name = "tqdm", specifier = "==4.70.0" },
 ]
 
@@ -216,12 +216,12 @@ wheels = [
 ]
 
 [[package]]
-name = "pypng"
-version = "0.20220715.0"
+name = "png"
+version = "0.0.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/93/cd/112f092ec27cca83e0516de0a3368dbd9128c187fb6b52aaaa7cde39c96d/pypng-0.20220715.0.tar.gz", hash = "sha256:739c433ba96f078315de54c0db975aee537cbc3e1d0ae4ed9aab0ca1e427e2c1", size = 128992, upload-time = "2022-07-15T14:11:05.301Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ab/f1/7846ecf1ac8dac3e8b88e273703b8d3cea1157e50f8eded5f9d6ac3296d4/png-0.0.2.tar.gz", hash = "sha256:e99b8a06d5996e803268cf816b96916936802abe26b31f3d5ad25331ab795c76", size = 98634, upload-time = "2026-11-17T05:44:03.996Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3e/b9/3766cc361d93edb2ce81e2e1f87dd98f314d7d513877a342d31b30741680/pypng-0.20220715.0-py3-none-any.whl", hash = "sha256:4a43e969b8f5aaafb2a415536c1a8ec7e341cd6a3f957fd5b5f32a4cfeed902c", size = 58057, upload-time = "2022-07-15T14:11:03.713Z" },
+    { url = "https://files.pythonhosted.org/packages/95/9d/b5f28dda480bd18a7a57ea94345c9f49f3d3cfb9adb7daf786bfa0ebc500/png-0.0.2-py3-none-any.whl", hash = "sha256:c92709abc779178917089603439279b6125b485521f82a2ec7f6125212f8b2df", size = 108717, upload-time = "2026-11-17T05:44:02.55Z" },
 ]
 
 [[package]]
